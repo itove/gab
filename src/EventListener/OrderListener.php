@@ -17,7 +17,7 @@ use Doctrine\ORM\Events;
 
 // #[AsEntityListener(event: Events::prePersist, entity: Order::class)]
 // #[AsEntityListener(event: Events::postPersist, entity: Order::class)]
-#[AsEntityListener(event: Events::preUpdate, entity: Order::class)]
+// #[AsEntityListener(event: Events::preUpdate, entity: Order::class)]
 class OrderListener extends AbstractController
 {
 }
