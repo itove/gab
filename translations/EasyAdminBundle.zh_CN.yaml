@@ -1,0 +1,14 @@
+action.save_and_continue: 保存
+action.save: 保存并返回
+filter.button.clear: 清除
+filter.button.apply: 确定
+filter.title: 过滤
+paginator.results: '%count%个记录'
+label.true: 是
+label.false: 否
+label.null: 空
+action.detail: 查看
+batch_action_modal.title: 确定%action_name%这 %num_items% 项？
+batch_action_modal.content: 该操作不能恢复！
+batch_action_modal.action: 确定
+settings.locale: 语言

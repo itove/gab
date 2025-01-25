@@ -1,0 +1,143 @@
+Edit: 编辑
+New: 新增
+ID: 序号
+Id: 序号
+Dashboard: 数据统计
+Product: 产品
+Price: 价格
+Date: 日期
+Name: 名称
+Contact: 联系人
+Phone: 电话
+Address: 详细地址
+Username: 用户名
+Password: 密码
+Roles: 角色
+Type: 类型
+Title: 标题
+Body: 正文
+Category: 类别
+Category Management: 类别管理
+Tag: 标签
+Tags: 标签
+Tag Management: 标签管理
+Image: 标题图片
+Images: 更多图片
+Conf: 设置
+Created At: 创建于
+CreatedAt: 创建于
+Updated At: 更新于
+Site Name: 网站名称
+Keywords: 网站关键词
+Description: 描述
+Email: 邮箱
+Icp: 备案信息
+Weibo: 微博
+Wx: 微信公众号
+Feature: 功能
+Feedback: 客户反馈
+Content: 内容
+Plain Password: 密码
+Repeat password: 密码确认
+admin: 管理员
+cashier: 核销员
+user: 用户
+term: 用户条款
+HOME: 首页
+SHOWROOM: 产品展示
+ABOUT US: 关于我们
+CONTACT: 联系我们
+Sitename: 网站名称
+Language: 语言
+Prefix: URL前缀
+Region: 版块
+Regions: 版块
+Summary: 概要
+Back to Site: 返回网站
+Content Management: 内容管理
+Region Management: 版块管理
+Settings: 网站设置
+Change Password: 修改密码
+User: 用户
+User Management: 用户管理
+Super Admin: 超级管理员
+Specs: 参数
+Spec Name: 参数名
+Spec Value: 参数值
+Firstname: 名字
+Lastname: 姓氏
+Country: 国家
+SHOW MORE: 查看详情
+News: 新闻动态
+Latest News: 最新消息
+Contact Us: 联系我们
+View All: 查看全部
+Contact Us If You Need Any Help: 如果您有需求，请联系我们
+Contact Address: 联系地址
+Service Mail: 服务邮箱
+Service Hotline: 全国服务热线
+About Us: 关于我们
+Submit: 提交
+I Agree: 我同意隐私政策
+en:对于您提供的个人信息，我们将尊重您的隐私并严格保密: 对于您提供的个人信息，我们将尊重您的隐私并严格保密
+Label: 标记
+Changelog: 更新日志
+Icon: 图标
+Page: 页面
+beian: 备案信息
+Footer: 页脚
+Weight: 权重
+Links: 链接
+Link: 链接
+Menu: 菜单
+Menu Management: 菜单管理
+Fields: 字段
+Count: 内容数量
+Video: 视频
+Audio: 音频
+Qr: 二维码
+Latitude: 纬度
+Longitude: 经度
+Order: 订单
+Ord: 订单
+Order Management: 订单管理
+Pending: 待付款
+Paid: 已付款
+Used: 已核销
+Check: 核销
+Checker: 核销人
+Cancelled: 已取消
+Deleted: 已删除
+Consumer: 顾客
+Quantity: 数量
+Amount: 金额
+Status: 状态
+Paid At: 支付于
+PaidAt: 支付于
+Used At: 核销于
+UsedAt: 核销于
+Cancelled At: 取消于
+Refunded At: 退款于
+Deleted At: 删除于
+Check Records: 核销记录
+Refund Records: 退款记录
+Refund: 退款
+Sn: 编号
+Appointment: 客户预约
+Sex: 性别
+Province: 省份
+City: 城市
+Taxon Management: 分类管理
+Coord: 坐标
+Author: 作者
+Page Management: 页面管理
+All Nodes: 所有内容
+vich_uploader.form_label.delete_confirm: 删除
+Area: 地区
+Area Management: 地区管理
+Insured: 被保人
+School: 学校
+Stage: 教育阶段
+Grades: 年级
+Grade: 年级
+Class: 班级
