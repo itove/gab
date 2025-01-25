@@ -260,73 +260,32 @@
 
                 // Only initialize school page functionality if we're on the school page
                 if (document.getElementById('picker-school')) {
-                    let selectedSchool = null;
+                    // Make selectedSchool accessible globally
+                    window.selectedSchool = null;
                     let isAgreed = false;
 
-                    // School data with IDs
-                    const schools = [
-                        { id: 1, name: '汉江师范学院' },
-                        { id: 2, name: '十堰市第一中学' },
-                        { id: 3, name: '十堰市第二中学' },
-                        { id: 4, name: '茅箭区实验小学' },
-                        { id: 5, name: '十堰市第一小学' },
-                        { id: 6, name: '十堰市第二小学' }
-                    ];
-
                     // Function to check if form is valid
-                    function checkFormValid() {
-                        console.log('Checking form:', { selectedSchool, isAgreed }); // Debug log
+                    window.checkFormValid = function() {
+                        console.log('Checking form:', { selectedSchool: window.selectedSchool, isAgreed }); // Debug log
                         const startOrderBtn = document.getElementById('start-order');
-                        if (selectedSchool && isAgreed) {
+                        if (window.selectedSchool && isAgreed) {
+                            console.log('Form is valid, enabling button');
                             startOrderBtn.classList.remove('disabled');
                             startOrderBtn.removeAttribute('disabled');
                         } else {
+                            console.log('Form is invalid, disabling button');
                             startOrderBtn.classList.add('disabled');
                             startOrderBtn.setAttribute('disabled', '');
                         }
                     }
-
-                    // Create picker for school selection
-                    const schoolPicker = app.picker.create({
-                        inputEl: '#picker-school',
-                        toolbar: true,
-                        rotateEffect: true,
-                        toolbarCloseText: '确定',
-                        cols: [
-                            {
-                                textAlign: 'center',
-                                values: schools.map(school => school.name),
-                                onChange: function(picker, value) {
-                                    selectedSchool = schools.find(school => school.name === value);
-                                    if (selectedSchool) {
-                                        document.getElementById('school-value').textContent = selectedSchool.name;
-                                        console.log('Selected school:', selectedSchool);
-                                        checkFormValid();
-                                    }
-                                }
-                            }
-                        ],
-                        on: {
-                            close: function (picker) {
-                                const value = picker.cols[0].value;
-                                if (value) {
-                                    selectedSchool = schools.find(school => school.name === value);
-                                    if (selectedSchool) {
-                                        document.getElementById('school-value').textContent = selectedSchool.name;
-                                        console.log('Selected school on close:', selectedSchool);
-                                        checkFormValid();
-                                    }
-                                }
-                            }
-                        }
-                    });
 
                     // Handle checkbox change
                     const agreementCheckbox = document.getElementById('agreement-checkbox');
                     if (agreementCheckbox) {
                         agreementCheckbox.addEventListener('change', function() {
                             isAgreed = this.checked;
-                            checkFormValid();
+                            console.log('Checkbox changed:', isAgreed);
+                            window.checkFormValid();
                         });
                     }
 
@@ -334,9 +293,9 @@
                     const startOrderBtn = document.getElementById('start-order');
                     if (startOrderBtn) {
                         startOrderBtn.addEventListener('click', function() {
-                            if (selectedSchool && selectedSchool.id) {
-                                console.log('Navigating with school:', selectedSchool);
-                                window.location.href = `/order/new?schoolId=${selectedSchool.id}`;
+                            if (window.selectedSchool && window.selectedSchool.id) {
+                                console.log('Navigating with school:', window.selectedSchool);
+                                window.location.href = `/order/new?schoolId=${window.selectedSchool.id}`;
                             } else {
                                 console.error('No school selected or invalid school object');
                             }
@@ -344,7 +303,7 @@
                     }
 
                     // Initial check
-                    checkFormValid();
+                    window.checkFormValid();
                 }
             });
         </script>

@@ -24,7 +24,7 @@
             <div class="block">
                 <h2>关于认真做好全市学校2025学年度风险管理工作的指导意见</h2>
                 <p class="text-align-justify">
-                为了认真贯彻落实《中华人民共和国未成年人保护法》，根据第二十二条规定：“学校、幼儿园、托儿所应当建立安全制度，加强对未成年人的安全教育，采取措施保障未成年人的人身安全”。教育部十分重视学生的关爱工作，早在2002年3月26日教育部12号令发布了《学生伤害事故处理办法》（2002年9月1日施行，2010年12月13日修正），其第三十一条规定：“提倡学生自愿参加意外伤害保险。在尊重学生意愿的前提下，学校可以为学生参加意外保险创造便利条件，但不得从中收取任何费用”。为加强学校风险管理，最大限度转移和分散学校、学生、家长的风险，现对2025年春季学期学校风险管理工作作如下安排，由学生家长自愿扫码参保。
+                为了认真贯彻落实《中华人民共和国未成年人保护法》，根据第二十二条规定："学校、幼儿园、托儿所应当建立安全制度，加强对未成年人的安全教育，采取措施保障未成年人的人身安全"。教育部十分重视学生的关爱工作，早在2002年3月26日教育部12号令发布了《学生伤害事故处理办法》（2002年9月1日施行，2010年12月13日修正），其第三十一条规定："提倡学生自愿参加意外伤害保险。在尊重学生意愿的前提下，学校可以为学生参加意外保险创造便利条件，但不得从中收取任何费用"。为加强学校风险管理，最大限度转移和分散学校、学生、家长的风险，现对2025年春季学期学校风险管理工作作如下安排，由学生家长自愿扫码参保。
                 </p>
             </div>
 
@@ -83,6 +83,33 @@
         document.querySelector('.navbar .left a').addEventListener('click', function(e) {
             e.preventDefault();
             window.location.href = '/';
+        });
+
+        // School picker
+        const app = Framework7.instance;
+        const schoolValues = [
+            {% for school in schools %}
+                { id: {{ school.id }}, value: '{{ school.name }}' },
+            {% endfor %}
+        ];
+
+        const schoolPicker = app.picker.create({
+            inputEl: '#picker-school',
+            cols: [{
+                textAlign: 'center',
+                values: schoolValues.map(item => item.value),
+                onChange: function(picker, value) {
+                    const selectedSchool = schoolValues.find(item => item.value === value);
+                    document.querySelector('#school-value').textContent = value;
+                    // Update the global selectedSchool variable
+                    window.selectedSchool = selectedSchool;
+                    console.log('School selected:', window.selectedSchool);
+                    // Trigger form validation
+                    if (typeof window.checkFormValid === 'function') {
+                        window.checkFormValid();
+                    }
+                }
+            }]
         });
     });
 </script>
