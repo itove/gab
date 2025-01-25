@@ -25,6 +25,29 @@
                 height: 44px !important;
                 line-height: 44px !important;
             }
+            
+            .text-align-justify {
+                text-align: justify;
+            }
+            
+            .color-orange {
+                background-color: #ff9500 !important;
+            }
+            
+            .navbar .f7-icons {
+                font-size: 22px;
+            }
+            
+            .text-color-gray {
+                color: #8e8e93;
+                font-size: 14px;
+            }
+            
+            .checkbox {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
         </style>
         {% endblock %}
 
@@ -51,17 +74,55 @@
                     {
                         path: '/order/new',
                         url: '/order/new',
+                    },
+                    {
+                        path: '/school',
+                        url: '/school',
                     }
                 ]
             });
 
             // Wait for DOM to be fully loaded
             document.addEventListener('DOMContentLoaded', function() {
+                // Create picker for school selection
+                const schoolPicker = app.picker.create({
+                    inputEl: '#picker-school',
+                    toolbar: true,
+                    rotateEffect: true,
+                    toolbarCloseText: '确定',
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: [
+                                '汉江师范学院',
+                                '十堰市第一中学',
+                                '十堰市第二中学',
+                                '茅箭区实验小学',
+                                '十堰市第一小学',
+                                '十堰市第二小学'
+                            ]
+                        }
+                    ],
+                    on: {
+                        change: function (picker, values) {
+                            document.getElementById('school-value').textContent = values[0];
+                        }
+                    }
+                });
+
                 // Handle order button click
                 const orderElement = document.getElementById('order');
                 if (orderElement) {
                     orderElement.addEventListener('click', function() {
                         window.location.href = '/order/new';
+                    });
+                }
+
+                // Handle start button click
+                const startElement = document.getElementById('start');
+                if (startElement) {
+                    startElement.addEventListener('click', function() {
+                        window.location.href = '/school';
                     });
                 }
 

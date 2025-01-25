@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}选择学校{% endblock %}
+
+{% block body %}
+    <div class="page" data-name="school">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link">
+                        <i class="icon f7-icons">house_fill</i>
+                    </a>
+                </div>
+                <div class="title">湖北省十堰市茅箭区</div>
+                <div class="right">
+                    <a href="#" class="link">
+                        <i class="icon f7-icons">ellipsis_circle</i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="block">
+                <h2>致学生家长的一封信</h2>
+                <p class="text-align-justify">
+                    风险无时不有、无处不在的客观性、普遍性、不确定性决定了风险转移的必要性，保险是风险转移的最佳选择。校园保险是国务院、湖北省政府关于加强校园安全风险防控体系建设的重要组成部分。2023年全市发生保险赔案32501件，赔款金额5893万余元。为了消除您和全家的后顾之忧，减轻孩子发生意外、疾病和造成他人人身伤害和财产损失后的家庭经济负担，保障孩子健康成长，请您为您的孩子购买一份学生平安保险、监护人责任保险和健康保险。关爱孩子从这里开始。
+                </p>
+            </div>
+
+            <div class="block block-strong margin-horizontal">
+                <a href="#" class="button button-large button-fill button-round color-orange">请选择学校</a>
+            </div>
+
+            <div class="block-title">联合保险经纪为您的孩子提供安心保障</div>
+
+            <div class="list inset">
+                <ul>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title">地区</div>
+                                <div class="item-after">湖北省/荆州市/松滋市</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link item-content" id="picker-school">
+                            <div class="item-inner">
+                                <div class="item-title">所在学校</div>
+                                <div class="item-after" id="school-value">请选择学校</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <p class="text-align-left text-color-gray">
+                    交费期间：2月1日至系统关机 保障期间：2月14日至9月31日，首次投保重疾和疾病住院等待期30天（续保无等待期），等待期内出险不予赔付。
+                </p>
+            </div>
+
+            <div class="block">
+                <label class="checkbox">
+                    <input type="checkbox" />
+                    <i class="icon-checkbox"></i>
+                    <span>我已阅读并同意《隐私政策》《客户服务协议》</span>
+                </label>
+            </div>
+
+            <div class="block margin-horizontal">
+                <button class="button button-large button-fill button-round">开始投保</button>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
