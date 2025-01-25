@@ -19,7 +19,7 @@ class SecurityController extends AbstractController
         $this->doctrine = $doctrine;
     }
     
-    #[Route(path: '/login', name: 'app_admin_login')]
+    #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // if ($this->getUser()) {
@@ -36,7 +36,7 @@ class SecurityController extends AbstractController
           'last_username' => $lastUsername,
           'error' => $error,
           'csrf_token_intention' => 'authenticate',
-          'target_path' => $this->generateUrl('admin'),
+          // 'target_path' => $this->generateUrl('admin'),
         ]);
     }
 
