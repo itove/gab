@@ -33,9 +33,16 @@ class School
     #[ORM\ManyToMany(targetEntity: Stage::class, inversedBy: 'schools')]
     private Collection $stage;
 
+    /**
+     * @var Collection<int, Insured>
+     */
+    #[ORM\OneToMany(targetEntity: Insured::class, mappedBy: 'school')]
+    private Collection $insureds;
+
     public function __construct()
     {
         $this->stage = new ArrayCollection();
+        $this->insureds = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +118,36 @@ class School
     public function removeStage(Stage $stage): static
     {
         $this->stage->removeElement($stage);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Insured>
+     */
+    public function getInsureds(): Collection
+    {
+        return $this->insureds;
+    }
+
+    public function addInsured(Insured $insured): static
+    {
+        if (!$this->insureds->contains($insured)) {
+            $this->insureds->add($insured);
+            $insured->setSchool($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInsured(Insured $insured): static
+    {
+        if ($this->insureds->removeElement($insured)) {
+            // set the owning side to null (unless already changed)
+            if ($insured->getSchool() === $this) {
+                $insured->setSchool(null);
+            }
+        }
 
         return $this;
     }
