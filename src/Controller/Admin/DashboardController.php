@@ -14,6 +14,9 @@ use App\Entity\Product;
 use App\Entity\School;
 use App\Entity\Stage;
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -42,7 +45,32 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Gab');
+            ->renderContentMaximized()
+            ->setTitle('关爱保');
+    }
+    
+    public function configureCrud(): Crud
+    {
+        return Crud::new()
+            ->showEntityActionsInlined()
+            ->setTimezone('Asia/Shanghai')
+            ->setDateTimeFormat('yyyy/MM/dd HH:mm')
+            ->setDefaultSort(['id' => 'DESC'])
+        ;
+    }
+
+    public function configureActions(): Actions
+    {
+        return Actions::new()
+            // ->disable('delete')
+            ->add('detail', 'edit')
+            ->add('index', 'edit')
+            ->add('index', 'new')
+            ->add('index', 'delete')
+            ->add(Crud::PAGE_NEW, Action::SAVE_AND_RETURN)
+            ->add(Crud::PAGE_EDIT, Action::SAVE_AND_RETURN)
+            ->add(Crud::PAGE_EDIT, Action::SAVE_AND_CONTINUE)
+        ;
     }
 
     public function configureMenuItems(): iterable
