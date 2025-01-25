@@ -6,8 +6,26 @@
         <title>{% block title %}关爱保{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7.1.5/framework7-bundle.min.css">
-        <link rel="stylesheet" href="https://cdn.framework7.io/icons/framework7-icons.css">
+        <link rel="stylesheet" href="/css/framework7-icons.css">
         {% block stylesheets %}
+        <style>
+            .margin-top {
+                margin-top: 16px !important;
+            }
+            .margin-horizontal {
+                margin-left: 16px !important;
+                margin-right: 16px !important;
+            }
+            .button-fill {
+                background-color: #007aff !important;  /* iOS blue color */
+                color: white !important;
+            }
+            
+            .button-large {
+                height: 44px !important;
+                line-height: 44px !important;
+            }
+        </style>
         {% endblock %}
 
         {% block javascripts %}
@@ -16,17 +34,46 @@
     </head>
     <body>
         <div id="app">
-            {% block body %}{% endblock %}
+            <div class="view view-main">
+                {% block body %}{% endblock %}
+            </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/framework7@7.1.5/framework7-bundle.min.js"></script>
         
         <script>
+            // Single Framework7 initialization
             var app = new Framework7({
-                root: '#app',
+                el: '#app',
+                name: 'Insurance App',
                 theme: 'ios',
+                routes: [
+                    {
+                        path: '/order/new',
+                        url: '/order/new',
+                    }
+                ]
+            });
+
+            // Wait for DOM to be fully loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                // Handle order button click
+                const orderElement = document.getElementById('order');
+                if (orderElement) {
+                    orderElement.addEventListener('click', function() {
+                        window.location.href = '/order/new';
+                    });
+                }
+
+                // Handle form submission
+                const orderForm = document.getElementById('order-form');
+                if (orderForm) {
+                    orderForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        // Add your form submission logic here
+                    });
+                }
             });
         </script>
-
     </body>
 </html>

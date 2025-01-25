@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order{% endblock %}
+
+{% block body %}
+    <div class="page" data-name="order-new">
+        <div class="page-content">
+            <form class="list" id="order-form">
+                <div class="block-title margin-top margin-horizontal">学生信息</div>
+                <div class="list inset">
+                    <ul>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">姓名</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="student_name" placeholder="请输入学生姓名">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">身份证号</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="student_id" placeholder="请输入学生身份证号">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">班级</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="student_class" placeholder="请输入班级">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="block-title margin-top margin-horizontal">家长信息</div>
+                <div class="list inset">
+                    <ul>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">家长姓名</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="parent_name" placeholder="请输入家长姓名">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">身份证号</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="parent_id" placeholder="请输入家长身份证号">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="block margin-horizontal">
+                    <button type="submit" class="button button-large button-fill button-round">
+                        提交订单
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %} 

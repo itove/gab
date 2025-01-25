@@ -2,13 +2,21 @@
 
 {% block title %}Hello IndexController!{% endblock %}
 
+{% block stylesheets %}
+<style>
+    .fixed{
+        position: fixed;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
     <!-- Toolbar with bottom tabs -->
-    <div class="toolbar toolbar-bottom tabbar-labels">
+    <div class="toolbar toolbar-bottom tabbar-labels fixed">
         <div class="toolbar-inner">
             <a href="#tab-1" class="tab-link tab-link-active">
-                <i class="icon f7-icons">doc_text</i>
-                <span class="tabbar-label">立即投保</span>
+                <i class="icon f7-icons">house</i>
+                <span class="tabbar-label">首页</span>
             </a>
             <a href="#tab-2" class="tab-link">
                 <i class="icon f7-icons">person</i>
@@ -22,7 +30,7 @@
         <div id="tab-1" class="tab tab-active">
             <!-- Content of first tab -->
             <div class="block">
-                <h2>立即投保</h2>
+                <a class="link" href="/order/new"><h2 id="order">立即投保</h2></a>
                 <!-- Add your insurance form content here -->
             </div>
         </div>
