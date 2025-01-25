@@ -13,9 +13,21 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
+        admin:
+            pattern: ^/admin
             lazy: true
-            # provider: app_user_provider
+            provider: app_user_provider
+            form_login:
+                login_path: app_admin_login
+                check_path: app_admin_login
+                success_handler: App\Security\AuthenticationSuccessHandler
+            logout:
+                path: app_admin_logout
+            access_denied_handler: App\Security\AccessDeniedHandler
+        main:
+            pattern: ^/
+            lazy: true
+            provider: app_user_provider
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -23,20 +35,14 @@ security:
             logout:
                 path: app_logout
             access_denied_handler: App\Security\AccessDeniedHandler
-            # or use this simpler approach:
-            # access_denied_url: /
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            switch_user: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
