@@ -137,12 +137,9 @@
 
         // Grade picker
         const gradeValues = [
-            { id: '1', value: '一年级' },
-            { id: '2', value: '二年级' },
-            { id: '3', value: '三年级' },
-            { id: '4', value: '四年级' },
-            { id: '5', value: '五年级' },
-            { id: '6', value: '六年级' }
+            {% for grade in grades %}
+                { id: {{ grade.id }}, value: '{{ grade.value }}' },
+            {% endfor %}
         ];
 
         const gradePicker = app.picker.create({
@@ -164,7 +161,22 @@
             { id: '2', value: '2班' },
             { id: '3', value: '3班' },
             { id: '4', value: '4班' },
-            { id: '5', value: '5班' }
+            { id: '5', value: '5班' },
+            { id: '6', value: '6班' },
+            { id: '7', value: '7班' },
+            { id: '8', value: '8班' },
+            { id: '9', value: '9班' },
+            { id: '10', value: '10班' },
+            { id: '11', value: '11班' },
+            { id: '12', value: '12班' },
+            { id: '13', value: '13班' },
+            { id: '14', value: '14班' },
+            { id: '15', value: '15班' },
+            { id: '16', value: '16班' },
+            { id: '17', value: '17班' },
+            { id: '18', value: '18班' },
+            { id: '19', value: '19班' },
+            { id: '20', value: '20班' }
         ];
 
         const classPicker = app.picker.create({

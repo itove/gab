@@ -11,8 +11,9 @@ final class IndexController extends AbstractController
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
+        $username = $this->getUser() ? $this->getUser()->getUserIdentifier() : '游客';
         return $this->render('index/index.html.twig', [
-            'controller_name' => 'IndexController',
+            'username' => $username
         ]);
     }
 }

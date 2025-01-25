@@ -240,21 +240,9 @@
                 const schoolInput = document.querySelector('input[name="school_name"]');
                 if (schoolInput) {
                     const urlParams = new URLSearchParams(window.location.search);
-                    const schoolId = urlParams.get('schoolId');
-                    if (schoolId) {
-                        // Get school name from your schools array
-                        const schools = [
-                            { id: 1, name: '汉江师范学院' },
-                            { id: 2, name: '十堰市第一中学' },
-                            { id: 3, name: '十堰市第二中学' },
-                            { id: 4, name: '茅箭区实验小学' },
-                            { id: 5, name: '十堰市第一小学' },
-                            { id: 6, name: '十堰市第二小学' }
-                        ];
-                        const school = schools.find(s => s.id === parseInt(schoolId));
-                        if (school) {
-                            schoolInput.value = school.name;
-                        }
+                    const schoolName = urlParams.get('schoolName');
+                    if (schoolName) {
+                        schoolInput.value = decodeURIComponent(schoolName);
                     }
                 }
 
@@ -294,8 +282,7 @@
                     if (startOrderBtn) {
                         startOrderBtn.addEventListener('click', function() {
                             if (window.selectedSchool && window.selectedSchool.id) {
-                                console.log('Navigating with school:', window.selectedSchool);
-                                window.location.href = `/order/new?schoolId=${window.selectedSchool.id}`;
+                                window.location.href = `/order/new?schoolId=${window.selectedSchool.id}&schoolName=${encodeURIComponent(window.selectedSchool.value)}`;
                             } else {
                                 console.error('No school selected or invalid school object');
                             }

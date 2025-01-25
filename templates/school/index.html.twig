@@ -101,16 +101,24 @@
                 onChange: function(picker, value) {
                     const selectedSchool = schoolValues.find(item => item.value === value);
                     document.querySelector('#school-value').textContent = value;
-                    // Update the global selectedSchool variable
                     window.selectedSchool = selectedSchool;
                     console.log('School selected:', window.selectedSchool);
-                    // Trigger form validation
                     if (typeof window.checkFormValid === 'function') {
                         window.checkFormValid();
                     }
                 }
             }]
         });
+
+        // Update start order button click handler
+        const startOrderBtn = document.getElementById('start-order');
+        if (startOrderBtn) {
+            startOrderBtn.addEventListener('click', function() {
+                if (window.selectedSchool && window.selectedSchool.id) {
+                    window.location.href = `/order/new?schoolId=${window.selectedSchool.id}&schoolName=${encodeURIComponent(window.selectedSchool.value)}`;
+                }
+            });
+        }
     });
 </script>
 {% endblock %} 
