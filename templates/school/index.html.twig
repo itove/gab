@@ -11,7 +11,7 @@
                         <i class="icon f7-icons">house_fill</i>
                     </a>
                 </div>
-                <div class="title">湖北省十堰市茅箭区</div>
+                <div class="title">湖北省松滋市</div>
                 <div class="right">
                     <a href="#" class="link">
                         <i class="icon f7-icons">ellipsis_circle</i>
@@ -22,14 +22,14 @@
 
         <div class="page-content">
             <div class="block">
-                <h2>致学生家长的一封信</h2>
+                <h2>关于认真做好全市学校2025学年度风险管理工作的指导意见</h2>
                 <p class="text-align-justify">
-                    风险无时不有、无处不在的客观性、普遍性、不确定性决定了风险转移的必要性，保险是风险转移的最佳选择。校园保险是国务院、湖北省政府关于加强校园安全风险防控体系建设的重要组成部分。2023年全市发生保险赔案32501件，赔款金额5893万余元。为了消除您和全家的后顾之忧，减轻孩子发生意外、疾病和造成他人人身伤害和财产损失后的家庭经济负担，保障孩子健康成长，请您为您的孩子购买一份学生平安保险、监护人责任保险和健康保险。关爱孩子从这里开始。
+                为了认真贯彻落实《中华人民共和国未成年人保护法》，根据第二十二条规定：“学校、幼儿园、托儿所应当建立安全制度，加强对未成年人的安全教育，采取措施保障未成年人的人身安全”。教育部十分重视学生的关爱工作，早在2002年3月26日教育部12号令发布了《学生伤害事故处理办法》（2002年9月1日施行，2010年12月13日修正），其第三十一条规定：“提倡学生自愿参加意外伤害保险。在尊重学生意愿的前提下，学校可以为学生参加意外保险创造便利条件，但不得从中收取任何费用”。为加强学校风险管理，最大限度转移和分散学校、学生、家长的风险，现对2025年春季学期学校风险管理工作作如下安排，由学生家长自愿扫码参保。
                 </p>
             </div>
 
             <div class="block block-strong margin-horizontal">
-                <a href="#" class="button button-large button-fill button-round color-orange">请选择学校</a>
+                <a href="#" class="button button-large button-fill color-orange">请选择学校</a>
             </div>
 
             <div class="block-title">联合保险经纪为您的孩子提供安心保障</div>
@@ -63,15 +63,27 @@
 
             <div class="block">
                 <label class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" id="agreement-checkbox" />
                     <i class="icon-checkbox"></i>
                     <span>我已阅读并同意《隐私政策》《客户服务协议》</span>
                 </label>
             </div>
 
             <div class="block margin-horizontal">
-                <button class="button button-large button-fill button-round">开始投保</button>
+                <button class="button button-large button-fill button-round disabled" id="start-order" disabled>开始投保</button>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Home icon handler
+        document.querySelector('.navbar .left a').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/';
+        });
+    });
+</script>
 {% endblock %} 

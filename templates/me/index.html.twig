@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}我的{% endblock %}
+
+{% block body %}
+<div class="page" data-name="me">
+    <div class="page-content">
+        <!-- User Profile Section -->
+        <div class="card no-shadow" style="margin-top: 20px;">
+            <div class="card-content">
+                <div class="list media-list no-hairlines">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <img src="https://placehold.co/60/EAEAEA/999?text=User" width="60" height="60" style="border-radius: 50%;">
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">132****2011</div>
+                                    </div>
+                                    <div class="item-subtitle">
+                                        <span class="badge color-orange">未实名</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="grid grid-cols-4 grid-gap medium-margin">
+            <a href="/orders" class="grid-item text-align-center" id="orders">
+                <img src="https://placehold.co/40/FF6B6B/FFF?text=Order" style="border-radius: 8px;">
+                <div class="grid-item-title">订单/保单</div>
+            </a>
+            <a href="/claims" class="grid-item text-align-center">
+                <img src="https://placehold.co/40/FFD93D/FFF?text=Claims" style="border-radius: 8px;">
+                <div class="grid-item-title">理赔报案</div>
+            </a>
+            <a href="/suggestions" class="grid-item text-align-center">
+                <img src="https://placehold.co/40/4ECDC4/FFF?text=Suggest" style="border-radius: 8px;">
+                <div class="grid-item-title">投诉建议</div>
+            </a>
+            <a href="/consult" class="grid-item text-align-center">
+                <img src="https://placehold.co/40/FF8B94/FFF?text=Consult" style="border-radius: 8px;">
+                <div class="grid-item-title">专属顾问</div>
+            </a>
+        </div>
+
+        <!-- Menu List -->
+        <div class="list no-hairlines">
+            <ul>
+                <li>
+                    <a href="/verify" class="item-content">
+                        <div class="item-media"><i class="icon f7-icons">person_crop_circle</i></div>
+                        <div class="item-inner">
+                            <div class="item-title">实名认证</div>
+                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile" class="item-content">
+                        <div class="item-media"><i class="icon f7-icons">person</i></div>
+                        <div class="item-inner">
+                            <div class="item-title">个人信息</div>
+                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/privacy" class="item-content">
+                        <div class="item-media"><i class="icon f7-icons">doc_text</i></div>
+                        <div class="item-inner">
+                            <div class="item-title">隐私协议</div>
+                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/service-agreement" class="item-content">
+                        <div class="item-media"><i class="icon f7-icons">doc_plaintext</i></div>
+                        <div class="item-inner">
+                            <div class="item-title">客户服务协议</div>
+                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/about" class="item-content">
+                        <div class="item-media"><i class="icon f7-icons">info_circle</i></div>
+                        <div class="item-inner">
+                            <div class="item-title">关于我们</div>
+                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="tel:400-000-0000" class="item-content">
+                        <div class="item-media"><i class="icon f7-icons">phone</i></div>
+                        <div class="item-inner">
+                            <div class="item-title">客服电话</div>
+                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+.grid {
+    display: grid;
+    padding: 15px;
+    background: #fff;
+    margin: 15px 0;
+}
+.grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid-gap {
+    gap: 15px;
+}
+.grid-item-title {
+    font-size: 12px;
+    margin-top: 8px;
+    color: #333;
+}
+.no-shadow {
+    box-shadow: none;
+}
+.badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+.list a {
+    color: #333;
+    text-decoration: none;
+}
+.item-title {
+    color: #333;
+}
+</style>
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('orders').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/orders';
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

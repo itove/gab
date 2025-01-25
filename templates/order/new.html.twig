@@ -1,35 +1,83 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Order{% endblock %}
+{% block title %}填写投保信息{% endblock %}
 
 {% block body %}
     <div class="page" data-name="order-new">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon f7-icons">chevron_left</i>
+                    </a>
+                </div>
+                <div class="title">填写投保信息</div>
+                <div class="right">
+                    <a href="#" class="link">
+                        <i class="icon f7-icons">ellipsis</i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <div class="page-content">
             <form class="list" id="order-form">
-                <div class="block-title margin-top margin-horizontal">学生信息</div>
+                <div class="block-title margin-top margin-horizontal">
+                    学生信息
+                    <a href="#" class="float-right link">历史被保人 <i class="icon f7-icons">chevron_right</i></a>
+                </div>
                 <div class="list inset">
                     <ul>
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <div class="item-title item-label">姓名</div>
+                                <div class="item-title">姓名</div>
                                 <div class="item-input-wrap">
-                                    <input type="text" name="student_name" placeholder="请输入学生姓名">
+                                    <input type="text" name="student_name" placeholder="请输入姓名">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">证件类型</div>
+                                <div class="item-after">
+                                    <div class="item-after-text">身份证</div>
+                                    <i class="icon f7-icons">chevron_right</i>
                                 </div>
                             </div>
                         </li>
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <div class="item-title item-label">身份证号</div>
+                                <div class="item-title">证件号码</div>
                                 <div class="item-input-wrap">
-                                    <input type="text" name="student_id" placeholder="请输入学生身份证号">
+                                    <input type="text" name="student_id" placeholder="请输入证件号码">
                                 </div>
                             </div>
                         </li>
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <div class="item-title item-label">班级</div>
+                                <div class="item-title">学校名称</div>
                                 <div class="item-input-wrap">
-                                    <input type="text" name="student_class" placeholder="请输入班级">
+                                    <input type="text" name="school_name" disabled readonly>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">年级</div>
+                                <div class="item-after">
+                                    <div class="item-after-text" id="grade-picker">请选择年级</div>
+                                    <i class="icon f7-icons">chevron_right</i>
+                                    <input type="hidden" name="grade_id"/>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">班级</div>
+                                <div class="item-after">
+                                    <div class="item-after-text" id="class-picker">请选择班级</div>
+                                    <i class="icon f7-icons">chevron_right</i>
+                                    <input type="hidden" name="class_id"/>
                                 </div>
                             </div>
                         </li>
@@ -41,28 +89,96 @@
                     <ul>
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <div class="item-title item-label">家长姓名</div>
+                                <div class="item-title">家长姓名</div>
                                 <div class="item-input-wrap">
                                     <input type="text" name="parent_name" placeholder="请输入家长姓名">
                                 </div>
                             </div>
                         </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">证件类型</div>
+                                <div class="item-after">
+                                    <div class="item-after-text">身份证</div>
+                                    <i class="icon f7-icons">chevron_right</i>
+                                </div>
+                            </div>
+                        </li>
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <div class="item-title item-label">身份证号</div>
+                                <div class="item-title">证件号码</div>
                                 <div class="item-input-wrap">
-                                    <input type="text" name="parent_id" placeholder="请输入家长身份证号">
+                                    <input type="text" name="parent_id" placeholder="请输入证件号码">
                                 </div>
                             </div>
                         </li>
                     </ul>
                 </div>
+
                 <div class="block margin-horizontal">
+                    <div class="price-row">
+                        <span class="price">¥100</span>
+                        <a href="#" class="link">查看明细</a>
+                    </div>
                     <button type="submit" class="button button-large button-fill button-round">
-                        提交订单
+                        立即投保
                     </button>
                 </div>
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Use existing Framework7 instance
+        const app = Framework7.instance;
+
+        // Grade picker
+        const gradeValues = [
+            { id: '1', value: '一年级' },
+            { id: '2', value: '二年级' },
+            { id: '3', value: '三年级' },
+            { id: '4', value: '四年级' },
+            { id: '5', value: '五年级' },
+            { id: '6', value: '六年级' }
+        ];
+
+        const gradePicker = app.picker.create({
+            inputEl: '#grade-picker',
+            cols: [{
+                textAlign: 'center',
+                values: gradeValues.map(item => item.value),
+                onChange: function(picker, value) {
+                    const selectedGrade = gradeValues.find(item => item.value === value);
+                    document.querySelector('input[name="grade_id"]').value = selectedGrade.id;
+                    document.querySelector('#grade-picker').textContent = value;
+                }
+            }]
+        });
+
+        // Class picker
+        const classValues = [
+            { id: '1', value: '1班' },
+            { id: '2', value: '2班' },
+            { id: '3', value: '3班' },
+            { id: '4', value: '4班' },
+            { id: '5', value: '5班' }
+        ];
+
+        const classPicker = app.picker.create({
+            inputEl: '#class-picker',
+            cols: [{
+                textAlign: 'center',
+                values: classValues.map(item => item.value),
+                onChange: function(picker, value) {
+                    const selectedClass = classValues.find(item => item.value === value);
+                    document.querySelector('input[name="class_id"]').value = selectedClass.id;
+                    document.querySelector('#class-picker').textContent = value;
+                }
+            }]
+        });
+    });
+</script>
 {% endblock %} 

@@ -48,6 +48,149 @@
                 align-items: center;
                 gap: 8px;
             }
+            
+            .float-right {
+                float: right;
+                color: #8e8e93;
+                font-size: 14px;
+            }
+            
+            .verified-badge {
+                background: #e1f5fe;
+                color: #0288d1;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                margin-left: 8px;
+            }
+            
+            .price-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+            
+            .price {
+                color: #ff3b30;
+                font-size: 24px;
+                font-weight: bold;
+            }
+            
+            .item-after {
+                color: #8e8e93;
+            }
+            
+            .item-after .f7-icons {
+                font-size: 16px;
+                margin-left: 4px;
+                color: #c7c7cc;
+            }
+            
+            .float-right .f7-icons {
+                font-size: 14px;
+                margin-left: 2px;
+                color: #8e8e93;
+            }
+            
+            .location {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 15px;
+            }
+            
+            .banner {
+                background: linear-gradient(135deg, #ff6b6b, #ff8787);
+                color: white;
+                border-radius: 0;
+                padding: 20px;
+                margin: 0;
+            }
+            
+            .banner h2 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: 600;
+            }
+            
+            .banner p {
+                margin: 8px 0 0;
+                opacity: 0.9;
+            }
+            
+            .grid {
+                display: grid;
+                padding: 16px;
+                gap: 16px;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .card {
+                margin: 0;
+                background: #f8f9fa;
+                border-radius: 12px;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .quick-action-icon {
+                position: absolute;
+                right: 16px;
+                bottom: 16px;
+                width: 48px;
+                height: 48px;
+                opacity: 0.8;
+            }
+            
+            .item-title {
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 8px;
+            }
+            
+            .item-subtitle {
+                font-size: 12px;
+                color: #8e8e93;
+            }
+            
+            .button-small {
+                padding: 4px 12px;
+                font-size: 12px;
+                margin-top: 8px;
+                background: #ff6b6b;
+            }
+            
+            .insurance-companies img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                padding: 12px;
+            }
+            
+            .swiper-pagination {
+                bottom: 0;
+            }
+            
+            .toolbar {
+                background: white;
+                border-top: 1px solid #e0e0e0;
+            }
+            
+            .tab-link .f7-icons {
+                font-size: 22px;
+            }
+            
+            .tab-link-active {
+                color: #ff6b6b;
+            }
         </style>
         {% endblock %}
 
@@ -84,55 +227,124 @@
 
             // Wait for DOM to be fully loaded
             document.addEventListener('DOMContentLoaded', function() {
-                // Create picker for school selection
-                const schoolPicker = app.picker.create({
-                    inputEl: '#picker-school',
-                    toolbar: true,
-                    rotateEffect: true,
-                    toolbarCloseText: '确定',
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            values: [
-                                '汉江师范学院',
-                                '十堰市第一中学',
-                                '十堰市第二中学',
-                                '茅箭区实验小学',
-                                '十堰市第一小学',
-                                '十堰市第二小学'
-                            ]
-                        }
-                    ],
-                    on: {
-                        change: function (picker, values) {
-                            document.getElementById('school-value').textContent = values[0];
-                        }
-                    }
+                // Handle back button click
+                const backButtons = document.querySelectorAll('.link.back');
+                backButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.history.back();
+                    });
                 });
 
-                // Handle order button click
-                const orderElement = document.getElementById('order');
-                if (orderElement) {
-                    orderElement.addEventListener('click', function() {
-                        window.location.href = '/order/new';
-                    });
+                // Set school name from URL parameter if on order page
+                const schoolInput = document.querySelector('input[name="school_name"]');
+                if (schoolInput) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const schoolId = urlParams.get('schoolId');
+                    if (schoolId) {
+                        // Get school name from your schools array
+                        const schools = [
+                            { id: 1, name: '汉江师范学院' },
+                            { id: 2, name: '十堰市第一中学' },
+                            { id: 3, name: '十堰市第二中学' },
+                            { id: 4, name: '茅箭区实验小学' },
+                            { id: 5, name: '十堰市第一小学' },
+                            { id: 6, name: '十堰市第二小学' }
+                        ];
+                        const school = schools.find(s => s.id === parseInt(schoolId));
+                        if (school) {
+                            schoolInput.value = school.name;
+                        }
+                    }
                 }
 
-                // Handle start button click
-                const startElement = document.getElementById('start');
-                if (startElement) {
-                    startElement.addEventListener('click', function() {
-                        window.location.href = '/school';
-                    });
-                }
+                // Only initialize school page functionality if we're on the school page
+                if (document.getElementById('picker-school')) {
+                    let selectedSchool = null;
+                    let isAgreed = false;
 
-                // Handle form submission
-                const orderForm = document.getElementById('order-form');
-                if (orderForm) {
-                    orderForm.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        // Add your form submission logic here
+                    // School data with IDs
+                    const schools = [
+                        { id: 1, name: '汉江师范学院' },
+                        { id: 2, name: '十堰市第一中学' },
+                        { id: 3, name: '十堰市第二中学' },
+                        { id: 4, name: '茅箭区实验小学' },
+                        { id: 5, name: '十堰市第一小学' },
+                        { id: 6, name: '十堰市第二小学' }
+                    ];
+
+                    // Function to check if form is valid
+                    function checkFormValid() {
+                        console.log('Checking form:', { selectedSchool, isAgreed }); // Debug log
+                        const startOrderBtn = document.getElementById('start-order');
+                        if (selectedSchool && isAgreed) {
+                            startOrderBtn.classList.remove('disabled');
+                            startOrderBtn.removeAttribute('disabled');
+                        } else {
+                            startOrderBtn.classList.add('disabled');
+                            startOrderBtn.setAttribute('disabled', '');
+                        }
+                    }
+
+                    // Create picker for school selection
+                    const schoolPicker = app.picker.create({
+                        inputEl: '#picker-school',
+                        toolbar: true,
+                        rotateEffect: true,
+                        toolbarCloseText: '确定',
+                        cols: [
+                            {
+                                textAlign: 'center',
+                                values: schools.map(school => school.name),
+                                onChange: function(picker, value) {
+                                    selectedSchool = schools.find(school => school.name === value);
+                                    if (selectedSchool) {
+                                        document.getElementById('school-value').textContent = selectedSchool.name;
+                                        console.log('Selected school:', selectedSchool);
+                                        checkFormValid();
+                                    }
+                                }
+                            }
+                        ],
+                        on: {
+                            close: function (picker) {
+                                const value = picker.cols[0].value;
+                                if (value) {
+                                    selectedSchool = schools.find(school => school.name === value);
+                                    if (selectedSchool) {
+                                        document.getElementById('school-value').textContent = selectedSchool.name;
+                                        console.log('Selected school on close:', selectedSchool);
+                                        checkFormValid();
+                                    }
+                                }
+                            }
+                        }
                     });
+
+                    // Handle checkbox change
+                    const agreementCheckbox = document.getElementById('agreement-checkbox');
+                    if (agreementCheckbox) {
+                        agreementCheckbox.addEventListener('change', function() {
+                            isAgreed = this.checked;
+                            checkFormValid();
+                        });
+                    }
+
+                    // Handle start order button click
+                    const startOrderBtn = document.getElementById('start-order');
+                    if (startOrderBtn) {
+                        startOrderBtn.addEventListener('click', function() {
+                            if (selectedSchool && selectedSchool.id) {
+                                console.log('Navigating with school:', selectedSchool);
+                                window.location.href = `/order/new?schoolId=${selectedSchool.id}`;
+                            } else {
+                                console.error('No school selected or invalid school object');
+                            }
+                        });
+                    }
+
+                    // Initial check
+                    checkFormValid();
                 }
             });
         </script>
