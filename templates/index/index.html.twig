@@ -3,18 +3,35 @@
 {% block title %}Hello IndexController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <!-- Toolbar with bottom tabs -->
+    <div class="toolbar toolbar-bottom tabbar-labels">
+        <div class="toolbar-inner">
+            <a href="#tab-1" class="tab-link tab-link-active">
+                <i class="icon f7-icons">doc_text</i>
+                <span class="tabbar-label">立即投保</span>
+            </a>
+            <a href="#tab-2" class="tab-link">
+                <i class="icon f7-icons">person</i>
+                <span class="tabbar-label">我的</span>
+            </a>
+        </div>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/al/w/gab/src/Controller/IndexController.php</code></li>
-        <li>Your template at <code>/home/al/w/gab/templates/index/index.html.twig</code></li>
-    </ul>
-</div>
+    <!-- Tabs content -->
+    <div class="tabs">
+        <div id="tab-1" class="tab tab-active">
+            <!-- Content of first tab -->
+            <div class="block">
+                <h2>立即投保</h2>
+                <!-- Add your insurance form content here -->
+            </div>
+        </div>
+        <div id="tab-2" class="tab">
+            <!-- Content of second tab -->
+            <div class="block">
+                <h2>我的</h2>
+                <!-- Add your profile content here -->
+            </div>
+        </div>
+    </div>
 {% endblock %}

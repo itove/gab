@@ -2,54 +2,203 @@
 
 {% block title %}Log in{% endblock %}
 
+{% block stylesheets %}
+<style>
+    .button {
+        margin: 8px 0;
+        text-transform: none;
+        border-radius: 8px;
+        height: 44px;
+        font-size: 16px;
+    }
+    .button-outline {
+        border-width: 2px;
+        font-weight: 500;
+    }
+    .button-fill {
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+        color: #999 !important;
+    }
+    .login-screen-title {
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+    .list {
+        margin: 20px 0;
+    }
+    .item-input-wrap input {
+        height: 44px;
+    }
+    .item-input-wrap input:disabled {
+        opacity: 0.6;
+        background-color: #f5f5f5;
+        color: #999;
+    }
+    .item-input-wrap input:disabled + .input-clear-button {
+        display: none;
+    }
+    .verification-wrapper {
+        display: block !important;
+    }
+    .verification-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    .verification-input {
+        flex: 1;
+        margin-right: 8px;
+    }
+    .verification-button {
+        flex-shrink: 0;
+    }
+    #sendCodeBtn {
+        margin: 0;
+        height: 44px;
+        padding: 0 16px;
+        white-space: nowrap;
+    }
+    /* Remove Framework7's default margins */
+    .item-inner {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .item-input .item-inner {
+        display: block;
+    }
+    .verification-row .item-input-wrap {
+        margin: 0;
+    }
+    .error-message {
+        text-align: right;
+        padding: 8px 16px;
+        font-size: 14px;
+        background: none;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h1 class="h3 mb-0">Please sign in</h1>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% if error %}
-                            <div class="alert alert-danger">
-                                {{ error.messageKey|trans(error.messageData, 'security') }}
+<div class="page">
+    <div class="page-content login-screen-content">
+        <div class="login-screen-title">登录</div>
+        
+        <form method="post" class="list">
+            <ul>
+                <li class="item-content item-input">
+                    <div class="item-inner">
+                        <div class="item-title item-label">手机号</div>
+                        <div class="item-input-wrap">
+                            <input type="tel" name="_username" id="phone" placeholder="请输入手机号" required>
+                            <span class="input-clear-button"></span>
+                        </div>
+                    </div>
+                </li>
+                
+                <li class="item-content item-input">
+                    <div class="item-inner verification-wrapper">
+                        <div class="item-title item-label">验证码</div>
+                        <div class="verification-row">
+                            <div class="verification-input">
+                                <div class="item-input-wrap">
+                                    <input type="text" name="_password" placeholder="请输入验证码" required>
+                                    <span class="input-clear-button"></span>
+                                </div>
                             </div>
-                        {% endif %}
-
-                        <div class="mb-3">
-                            <label for="username" class="form-label">username</label>
-                            <input type="text" value="{{ last_username }}" name="_username" id="username" 
-                                class="form-control" autocomplete="email" required autofocus>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" name="_password" id="password" 
-                                class="form-control" autocomplete="current-password" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="_remember_me" id="remember_me">
-                                <label class="form-check-label" for="remember_me">
-                                    Remember me
-                                </label>
+                            <div class="verification-button">
+                                <button type="button" class="button button-outline color-primary" id="sendCodeBtn">获取验证码</button>
                             </div>
                         </div>
+                    </div>
+                </li>
+            </ul>
 
-                        <input type="hidden" name="_csrf_token"
-                            value="{{ csrf_token('authenticate') }}"
-                        >
-
-                        <button class="btn btn-lg btn-primary w-100" type="submit">
-                            Sign in
-                        </button>
-                    </form>
-                </div>
+            <div class="block">
+                <button type="submit" class="button button-large button-fill color-primary">登录</button>
             </div>
-        </div>
+
+            {% if error %}
+                <div class="error-message text-color-red">
+                    验证码错误
+                    {#
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                    #}
+                </div>
+            {% endif %}
+        </form>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sendCodeBtn = document.getElementById('sendCodeBtn');
+        const phoneInput = document.getElementById('phone');
+        let timer = null;
+        
+        // Create a single reusable dialog instance
+        const successDialog = app.dialog.create({
+            // title: 'Success',
+            text: '验证码已发送！',
+            buttons: [{
+                text: 'OK'
+            }]
+        });
+        
+        function startCountdown(duration) {
+            let timeLeft = duration;
+            sendCodeBtn.disabled = true;
+            phoneInput.disabled = true;  // Disable phone input
+            
+            if (timer) {
+                clearInterval(timer);
+            }
+            
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    sendCodeBtn.disabled = false;
+                    phoneInput.disabled = false;  // Re-enable phone input
+                    sendCodeBtn.textContent = '获取验证码';
+                    return;
+                }
+                
+                sendCodeBtn.textContent = `重发 (${timeLeft}s)`;
+                timeLeft--;
+            }, 1000);
+        }
+
+        sendCodeBtn.addEventListener('click', function() {
+            const phone = phoneInput.value;
+            const phoneRegex = /^\d{11}$/;  // Exactly 13 digits
+            
+            if (!phone) {
+                app.dialog.alert('请输入手机号');
+                return;
+            }
+            
+            if (!phoneRegex.test(phone)) {
+                app.dialog.alert('请输入有效的11位手机号');
+                return;
+            }
+            
+            // Send code without preloader
+            sendCodeBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                startCountdown(60);
+                successDialog.open();
+            }, 1000);
+        });
+    });
+</script>
+{% endblock %}
