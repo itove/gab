@@ -20,6 +20,10 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
+        if (empty($identifier)) {
+            throw new \InvalidArgumentException('Identifier cannot be empty.');
+        }
+
         $user = $this->entityManager->getRepository(User::class)
             ->createQueryBuilder('u')
             ->where('u.username = :identifier OR u.phone = :identifier')
@@ -31,12 +35,8 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             // Create new user if not exists
             $user = new User();
             // Check if identifier is a phone number
-            if (preg_match('/^\d{11}$/', $identifier)) {
-                $user->setPhone($identifier);
-                $user->setUsername('user_' . $identifier);
-            } else {
-                $user->setUsername($identifier);
-            }
+            $user->setPhone($identifier);
+            $user->setUsername('user_' . $identifier);
             
             // Set default password
             $hashedPassword = $this->passwordHasher->hashPassword($user, '111111');
