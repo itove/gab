@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\School;
 use App\Entity\Order;
 use App\Entity\Insured;
+use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OrderRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class OrderController extends AbstractController
 {
@@ -62,42 +64,48 @@ class OrderController extends AbstractController
     }
 
     #[Route('/order/create', name: 'app_order_create', methods: ['POST'])]
-    public function create(Request $request): Response
+    public function create(Request $request): JsonResponse
     {
         // Get form data
         $studentName = $request->request->get('student_name');
         $studentIdnum = $request->request->get('student_idnum');
         $schoolId = $request->request->get('school_id');
         $school = $this->doctrine->getRepository(School::class)->find($schoolId);
+        $product = $this->doctrine->getRepository(Product::class)->find(1);
         $grade = $request->request->get('grade');
         $class = $request->request->get('class');
         $parentName = $request->request->get('parent_name');
         $parentId = $request->request->get('parent_id');
 
         try {
-            // TODO: Add your order creation logic here
-            // For example:
+            $entityManager = $this->doctrine->getManager();
+            
             $insured = new Insured();
             $insured->setSchool($school);
             $insured->setIdnum($studentIdnum);
             $insured->setName($studentName);
             $insured->setGrade($grade);
             $insured->setClass($class);
-            $doctrine->persist($insured);
+            $entityManager->persist($insured);
 
             $order = new Order();
             $order->setInsured($insured);
             $order->setApplicant($this->getUser());
-            // $order->setProduct());
-            $doctrine->persist($order);
+            $order->setProduct($product);
+            $entityManager->persist($order);
 
-            $doctrine->flush();
+            $entityManager->flush();
 
-            $this->addFlash('success', 'Order created successfully');
-            return $this->redirectToRoute('app_orders');
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Order created successfully',
+                'redirectUrl' => $this->generateUrl('app_orders')
+            ]);
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Failed to create order: ' . $e->getMessage());
-            return $this->redirectToRoute('app_order_new');
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Failed to create order: ' . $e->getMessage()
+            ], 400);
         }
     }
 } 

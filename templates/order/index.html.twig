@@ -46,18 +46,20 @@
                         <div class="item-content">
                             <div class="item-inner">
                                 <div class="item-title-row">
-                                    <div class="item-title">{{ order.productName }}</div>
+                                    <div class="item-title">{{ order.product.name }}</div>
                                     <div class="item-after" style="color: #FF6B6B;">{{ order.status }}</div>
                                 </div>
                                 <div class="item-text">
                                     <div class="order-details">
                                         <div class="detail-row">
                                             <span class="label">保障期</span>
+                                            {#
                                             <span class="value">{{ order.startDate|date('Y.m.d') }}-{{ order.endDate|date('Y.m.d') }}</span>
+                                            #}
                                         </div>
                                         <div class="detail-row">
                                             <span class="label">投保人</span>
-                                            <span class="value">{{ order.policyHolder }}</span>
+                                            <span class="value">{{ order.applicant }}</span>
                                         </div>
                                         <div class="detail-row">
                                             <span class="label">被保险人</span>
@@ -65,12 +67,12 @@
                                         </div>
                                         <div class="detail-row">
                                             <span class="label">保费</span>
-                                            <span class="value">¥{{ order.premium|number_format(2) }}</span>
+                                            <span class="value">¥{{ order.product.price|number_format(2) }}</span>
                                         </div>
                                     </div>
                                     <div class="button-row">
-                                        <a href="{{ path('claim_create', {'id': order.id}) }}" class="button button-small button-outline">申请理赔</a>
-                                        <a href="{{ path('order_detail', {'id': order.id}) }}" class="button button-small button-outline">查看详情</a>
+                                        <a href="{{ path('app_orders', {'id': order.id}) }}" class="button button-small button-outline">申请理赔</a>
+                                        <a href="{{ path('app_orders', {'id': order.id}) }}" class="button button-small button-outline">查看详情</a>
                                     </div>
                                 </div>
                             </div>
