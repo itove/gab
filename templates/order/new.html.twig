@@ -2,6 +2,27 @@
 
 {% block title %}填写投保信息{% endblock %}
 
+{% block stylesheets %}
+<style>
+.item-content{
+  padding: 0 16px;
+}
+.item-title{
+  width: 30%;
+}
+.list .item-inner{
+  padding: 16px 0;
+  border-bottom: 0.2px solid #ededed;
+}
+.item-input .item-inner{
+  flex-direction: row;
+}
+.item-input-wrap input[type="text"] {
+  text-align: right;
+}
+</style>
+{% endblock %}
+
 {% block body %}
     <div class="page" data-name="order-new">
         <div class="navbar">
