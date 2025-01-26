@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MeController extends AbstractController
 {
-    #[Route('/me', name: 'app_me')]
     public function index(): Response
     {
         // TODO: Get actual username from user session/authentication

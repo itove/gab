@@ -4,6 +4,25 @@
 
 {% block stylesheets %}
 <style>
+    #tab-2{
+      background: #ffffff;
+      padding: 16px;
+      .list{
+        .item-content{
+          padding-top: 6px;
+          padding-bottom: 6px;
+          border-bottom: .2px solid #ededed;
+        }
+      }
+      .item-media{
+        .icon{
+          font-size: 16px;
+        }
+      }
+    }
+    #tab-2 .item-inner{
+      font-size: 14px;
+    }
     .fixed{
         position: fixed;
     }
@@ -230,7 +249,7 @@
                     <div class="list media-list no-hairlines">
                         <ul>
                             <li>
-                                <div class="item-content">
+                                <div class="item-content" style="padding-left: 0;">
                                     <div class="item-media">
                                         <img src="https://fakeimg.pl/60/EAEAEA/999/?text=用户&font=noto" width="60" height="60" style="border-radius: 50%;">
                                     </div>
@@ -357,7 +376,7 @@
 
         document.querySelector('a[href="#tab-2"]').addEventListener('click', function(e) {
             e.preventDefault();
-            history.pushState(null, '', '/me');
+            history.pushState(null, '', '/#me');
         });
     });
 </script>
