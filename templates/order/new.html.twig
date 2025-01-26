@@ -14,11 +14,30 @@
   padding: 16px 0;
   border-bottom: 0.2px solid #ededed;
 }
+.history{
+  color: #a1a1a1;
+  font-size: 12px;
+}
+.price-row{
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  .price{
+    color: red;
+    font-size: 24px;
+  }
+}
+.list .item-after{
+  align-items: center;
+}
 .item-input .item-inner{
   flex-direction: row;
 }
 .item-input-wrap input[type="text"] {
   text-align: right;
+}
+.icon.f7-icons.chevron-small {
+  font-size: 14px;
 }
 </style>
 {% endblock %}
@@ -45,7 +64,7 @@
             <form class="list" id="order-form">
                 <div class="block-title margin-top margin-horizontal">
                     学生信息
-                    <a href="#" class="float-right link">历史被保人 <i class="icon f7-icons">chevron_right</i></a>
+                    <a href="#" class="float-right link history">历史被保人 <i class="icon f7-icons chevron-small">chevron_right</i></a>
                 </div>
                 <div class="list inset" style="background-color: #ffffff;">
                     <ul>
@@ -62,7 +81,7 @@
                                 <div class="item-title">证件类型</div>
                                 <div class="item-after">
                                     <div class="item-after-text">身份证</div>
-                                    <i class="icon f7-icons">chevron_right</i>
+                                    <i class="icon f7-icons chevron-small">chevron_right</i>
                                 </div>
                             </div>
                         </li>
@@ -87,7 +106,7 @@
                                 <div class="item-title">年级</div>
                                 <div class="item-after">
                                     <div class="item-after-text" id="grade-picker">请选择年级</div>
-                                    <i class="icon f7-icons">chevron_right</i>
+                                    <i class="icon f7-icons chevron-small">chevron_right</i>
                                     <input type="hidden" name="grade_id"/>
                                 </div>
                             </div>
@@ -97,7 +116,7 @@
                                 <div class="item-title">班级</div>
                                 <div class="item-after">
                                     <div class="item-after-text" id="class-picker">请选择班级</div>
-                                    <i class="icon f7-icons">chevron_right</i>
+                                    <i class="icon f7-icons chevron-small">chevron_right</i>
                                     <input type="hidden" name="class_id"/>
                                 </div>
                             </div>
@@ -121,7 +140,7 @@
                                 <div class="item-title">证件类型</div>
                                 <div class="item-after">
                                     <div class="item-after-text">身份证</div>
-                                    <i class="icon f7-icons">chevron_right</i>
+                                    <i class="icon f7-icons chevron-small">chevron_right</i>
                                 </div>
                             </div>
                         </li>
