@@ -187,6 +187,20 @@
             const submitButton = form.querySelector('button[type="submit"]');
             const url = submitButton.dataset.url;
             
+            // Check for empty inputs
+            const inputs = form.querySelectorAll('input[type="text"], input[type="hidden"]');
+            let isEmpty = false;
+            inputs.forEach(input => {
+                if (!input.value) {
+                    isEmpty = true;
+                }
+            });
+
+            if (isEmpty) {
+                app.dialog.alert('请填写所有必填字段'); // Alert if any input is empty
+                return; // Stop form submission
+            }
+
             // Use regular fetch API instead of Framework7's request
             fetch(url, {
                 method: 'POST',
