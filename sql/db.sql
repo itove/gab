@@ -154,11 +154,21 @@ CREATE TABLE public."order" (
     id integer NOT NULL,
     applicant_id integer,
     insured_id integer,
-    product_id integer
+    product_id integer,
+    sn character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone NOT NULL,
+    status smallint NOT NULL
 );
 
 
 ALTER TABLE public."order" OWNER TO gab;
+
+--
+-- Name: COLUMN "order".created_at; Type: COMMENT; Schema: public; Owner: gab
+--
+
+COMMENT ON COLUMN public."order".created_at IS '(DC2Type:datetime_immutable)';
+
 
 --
 -- Name: order_id_seq; Type: SEQUENCE; Schema: public; Owner: gab
@@ -319,7 +329,8 @@ CREATE TABLE public."user" (
     password character varying(255) NOT NULL,
     name character varying(255) DEFAULT NULL::character varying,
     phone character varying(255) DEFAULT NULL::character varying,
-    idnum character varying(255) DEFAULT NULL::character varying
+    idnum character varying(255) DEFAULT NULL::character varying,
+    plain_password character varying(255) DEFAULT NULL::character varying
 );
 
 
@@ -409,6 +420,8 @@ DoctrineMigrations\\Version20250125072834	2025-01-25 07:28:38	19
 DoctrineMigrations\\Version20250125080700	2025-01-25 08:07:03	34
 DoctrineMigrations\\Version20250125081147	2025-01-25 08:11:54	45
 DoctrineMigrations\\Version20250125081303	2025-01-25 08:13:09	11
+DoctrineMigrations\\Version20250125143316	2025-01-25 14:33:30	14
+DoctrineMigrations\\Version20250125233122	2025-01-25 23:31:26	16
 \.
 
 
@@ -417,6 +430,21 @@ DoctrineMigrations\\Version20250125081303	2025-01-25 08:13:09	11
 --
 
 COPY public.insured (id, school_id, name, idnum, grade, class) FROM stdin;
+1	\N	地方第三方	77	1	1
+2	\N	地方第三方	77	1	1
+3	\N	地方第三方	77	1	1
+4	\N	地方第三方	77	1	1
+5	\N	地方第三方	77	1	1
+6	\N	地方第三方	77	1	1
+7	\N				
+8	\N				
+9	\N	地方第三方	77	1	
+10	\N	地方第三方	77		
+11	\N	地方第三方	77		
+12	\N	地方第三方	77		
+13	\N	地方第三方	77	1	5
+14	\N	地方第三方	420302198606250333	1	1
+15	\N	地方第三方	777777777777777888	1	2
 \.
 
 
@@ -432,7 +460,22 @@ COPY public.messenger_messages (id, body, headers, queue_name, created_at, avail
 -- Data for Name: order; Type: TABLE DATA; Schema: public; Owner: gab
 --
 
-COPY public."order" (id, applicant_id, insured_id, product_id) FROM stdin;
+COPY public."order" (id, applicant_id, insured_id, product_id, sn, created_at, status) FROM stdin;
+1	8	1	1	67959B54CAAE2420883154	2025-01-26 02:17:56	0
+2	8	2	1	67959C8B5DDD8915119353	2025-01-26 02:23:07	0
+3	8	3	1	67959D023DD32907351084	2025-01-26 02:25:06	0
+4	8	4	1	67959DCE6D023289232899	2025-01-26 02:28:30	0
+5	8	5	1	67959E39C4FF1969969390	2025-01-26 02:30:17	0
+6	8	6	1	6795A0A76AE29530890447	2025-01-26 02:40:39	0
+7	8	7	1	6795A206001C0978053774	2025-01-26 02:46:30	0
+8	8	8	1	6795A209B605E167194156	2025-01-26 02:46:33	0
+9	8	9	1	6795A3026EDD2075125695	2025-01-26 02:50:42	0
+10	8	10	1	6795A43569207980671123	2025-01-26 02:55:49	0
+11	8	11	1	6795A4679D10C978968382	2025-01-26 02:56:39	0
+12	8	12	1	6795A4790D1A6450905886	2025-01-26 02:56:57	0
+13	8	13	1	6795A54B1D02E166417720	2025-01-26 03:00:27	0
+14	8	14	1	6795A61DD5A20312838540	2025-01-26 03:03:57	0
+15	8	15	1	6795A6ACC0052360199344	2025-01-26 03:06:20	0
 \.
 
 
@@ -441,7 +484,7 @@ COPY public."order" (id, applicant_id, insured_id, product_id) FROM stdin;
 --
 
 COPY public.product (id, name, price) FROM stdin;
-1	学平险	100
+1	关爱保	100
 \.
 
 
@@ -636,7 +679,15 @@ COPY public.stage (id, name, grades) FROM stdin;
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: gab
 --
 
-COPY public."user" (id, username, roles, password, name, phone, idnum) FROM stdin;
+COPY public."user" (id, username, roles, password, name, phone, idnum, plain_password) FROM stdin;
+1	u1	[]	$2y$13$HkiFWe.elCiyiCjizkKhFuFvziGGxhyK3hwKml1iGSO1IlxekWJzy	\N	\N	\N	111
+2	al	["ROLE_SUPER_ADMIN"]	$2y$13$2nsv0XZmbTBgwKUY/Zf4ROj7bE5.fM52PlWx3i0O0iuygluZwirn2	\N	\N	\N	111
+3	admin	[]	$2y$13$OcE69KNlboCiCJcgrQwD8eIqjKPZoPEfnzS5sBpb4nQLBrBOdmlae	\N	\N	\N	111111
+4		[]	$2y$13$.KyrLVh8DOrFJuC9Z20vFOW1.iP.V82nr2y0.KbBqRcEYs2HUndb6	\N	\N	\N	111111
+5	13459596	[]	$2y$13$R5UMj1nMaEcJM5S/YxNGoO4I6w32SsTq3fCqE2ApaReMccWyEraa6	\N	\N	\N	111111
+6	user_1111	[]	$2y$13$PorDKIILP9XxtwxmvgnMXeTRTbuL6sFHT1hdRwCVz1kldYygIUotC	\N	11111111111	\N	111111
+8	user_13207262011	[]	$2y$13$OqPzhUDzcNaqwjcmYzmLk.ijtW0ZyrfzD4mx4W9suigi.e25WSkCu	\N	13207262011	\N	111111
+9	user_13812345678	[]	$2y$13$6j4LKDcyOtflY94eZ/q9ke37A58YIjI4/tVKxRTRkt3Y0OcDtu42G	\N	13812345678	\N	111111
 \.
 
 
@@ -644,7 +695,7 @@ COPY public."user" (id, username, roles, password, name, phone, idnum) FROM stdi
 -- Name: insured_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gab
 --
 
-SELECT pg_catalog.setval('public.insured_id_seq', 1, false);
+SELECT pg_catalog.setval('public.insured_id_seq', 15, true);
 
 
 --
@@ -658,7 +709,7 @@ SELECT pg_catalog.setval('public.messenger_messages_id_seq', 1, false);
 -- Name: order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gab
 --
 
-SELECT pg_catalog.setval('public.order_id_seq', 1, false);
+SELECT pg_catalog.setval('public.order_id_seq', 15, true);
 
 
 --
@@ -686,7 +737,7 @@ SELECT pg_catalog.setval('public.stage_id_seq', 5, true);
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gab
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 1, false);
+SELECT pg_catalog.setval('public.user_id_seq', 9, true);
 
 
 --
