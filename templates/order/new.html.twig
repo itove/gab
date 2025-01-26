@@ -4,6 +4,9 @@
 
 {% block stylesheets %}
 <style>
+.d-none{
+  display: none !important;
+}
 .item-content{
   padding: 0 16px;
 }
@@ -89,7 +92,7 @@
                             <div class="item-inner">
                                 <div class="item-title">证件号码</div>
                                 <div class="item-input-wrap">
-                                    <input type="text" name="student_id" placeholder="请输入证件号码">
+                                    <input type="text" name="student_idnum" placeholder="请输入证件号码">
                                 </div>
                             </div>
                         </li>
@@ -98,6 +101,7 @@
                                 <div class="item-title">学校名称</div>
                                 <div class="item-input-wrap">
                                     <input type="text" name="school_name" disabled readonly>
+                                    <input type="text" name="school_id" value="1" readonly class="d-none">
                                 </div>
                             </div>
                         </li>
@@ -107,7 +111,7 @@
                                 <div class="item-after">
                                     <div class="item-after-text" id="grade-picker">请选择年级</div>
                                     <i class="icon f7-icons chevron-small">chevron_right</i>
-                                    <input type="hidden" name="grade_id"/>
+                                    <input type="hidden" name="grade"/>
                                 </div>
                             </div>
                         </li>
@@ -117,7 +121,7 @@
                                 <div class="item-after">
                                     <div class="item-after-text" id="class-picker">请选择班级</div>
                                     <i class="icon f7-icons chevron-small">chevron_right</i>
-                                    <input type="hidden" name="class_id"/>
+                                    <input type="hidden" name="class"/>
                                 </div>
                             </div>
                         </li>
@@ -160,7 +164,8 @@
                         <span class="price">¥100</span>
                         <a href="#" class="link">查看明细</a>
                     </div>
-                    <button type="submit" class="button button-large button-fill button-round">
+                    <button type="submit" class="button button-large button-fill button-round" 
+                            data-url="{{ path('app_order_create') }}">
                         立即投保
                     </button>
                 </div>
@@ -174,6 +179,20 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Use existing Framework7 instance
         const app = Framework7.instance;
+
+        // Form submission handler
+        const form = document.getElementById('order-form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const submitButton = form.querySelector('button[type="submit"]');
+            const url = submitButton.dataset.url;
+            
+            const formData = new FormData(form);
+            app.request.post(url, formData, function(response) {
+                // Handle response here
+                console.log(response);
+            });
+        });
 
         // Grade picker
         const gradeValues = [
@@ -189,7 +208,7 @@
                 values: gradeValues.map(item => item.value),
                 onChange: function(picker, value) {
                     const selectedGrade = gradeValues.find(item => item.value === value);
-                    document.querySelector('input[name="grade_id"]').value = selectedGrade.id;
+                    document.querySelector('input[name="grade"]').value = selectedGrade.id;
                     document.querySelector('#grade-picker').textContent = value;
                 }
             }]
@@ -226,7 +245,7 @@
                 values: classValues.map(item => item.value),
                 onChange: function(picker, value) {
                     const selectedClass = classValues.find(item => item.value === value);
-                    document.querySelector('input[name="class_id"]').value = selectedClass.id;
+                    document.querySelector('input[name="class"]').value = selectedClass.id;
                     document.querySelector('#class-picker').textContent = value;
                 }
             }]
