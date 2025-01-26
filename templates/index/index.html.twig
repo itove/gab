@@ -90,6 +90,59 @@
         font-size: 14px;
         color: #999;
     }
+
+    /* Tab Styling */
+    .toolbar {
+        min-height: 64px;
+        padding: 5px 0;
+    }
+
+    .toolbar-inner {
+        justify-content: space-between;
+        margin: 5px 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .tab-link {
+        flex: 1;
+        width: 50%;
+        text-align: center;
+        padding: 12px 20px;
+        margin: 5px 0;
+        color: #999;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;           /* Reduced gap between icon and text */
+    }
+
+    .tab-link i {
+        font-size: 24px;
+        color: #999;
+        display: block;
+        line-height: 1;    /* Added to reduce space */
+    }
+
+    .tab-link .tabbar-label {
+        font-size: 12px;
+        color: #999;
+        display: block;
+        line-height: 1;    /* Added to reduce space */
+    }
+
+    /* Rest of the styles remain the same */
+    .tab-link.tab-link-active,
+    .tab-link.tab-link-active i,
+    .tab-link.tab-link-active .tabbar-label {
+        color: #FF6B6B !important;
+    }
+
+    .tab-link:hover {
+        background-color: rgba(0,0,0,0.03);
+    }
 </style>
 {% endblock %}
 
@@ -114,35 +167,35 @@
             <div class="block">
                 <!-- Banner Section -->
                 <div class="banner-section">
-                    <img src="https://placehold.co/800x300/FF6B6B/FFF?text=Banner" alt="北京联合保险经纪" class="banner-image" style="width: 100%; border-radius: 12px;">
+                    <img src="https://fakeimg.pl/800x300/FF6B6B/FFF/?text=保险服务&font=noto" alt="北京联合保险经纪" class="banner-image" style="width: 100%; border-radius: 12px;">
                 </div>
 
                 <!-- Menu Cards Grid -->
                 <div class="grid grid-cols-2 gap-15" style="margin-top: 20px;">
                     <a href="/school" class="card menu-card" id="start">
                         <div class="card-content">
-                            <img src="https://placehold.co/40/FF6B6B/FFF?text=New" alt="订单图标" style="width: 40px;">
+                            <img src="https://fakeimg.pl/40/CC996B/FFF/?text=投保&font=noto" alt="订单图标" style="width: 40px;">
                             <div class="card-title">立即投保</div>
                             <div class="card-subtitle">现在为家人投保 ></div>
                         </div>
                     </a>
                     <a href="/orders" class="card menu-card" id="index-orders">
                         <div class="card-content">
-                            <img src="https://placehold.co/40/CC996B/FFF?text=Order" alt="订单图标" style="width: 40px;">
+                            <img src="https://fakeimg.pl/40/FF6B6B/FFF/?text=订单&font=noto" alt="订单图标" style="width: 40px;">
                             <div class="card-title">订单/保单</div>
                             <div class="card-subtitle">查看投保信息 ></div>
                         </div>
                     </a>
                     <a href="/service" class="card menu-card">
                         <div class="card-content">
-                            <img src="https://placehold.co/40/4ECDC4/FFF?text=Service" alt="客服图标" style="width: 40px;">
+                            <img src="https://fakeimg.pl/40/4ECDC4/FFF/?text=客服&font=noto" alt="客服图标" style="width: 40px;">
                             <div class="card-title">客服中心</div>
                             <div class="card-subtitle">在校学生投保、理赔等常见问题咨询</div>
                         </div>
                     </a>
                     <a href="/claims" class="card menu-card">
                         <div class="card-content">
-                            <img src="https://placehold.co/40/FFD93D/FFF?text=Claims" alt="理赔图标" style="width: 40px;">
+                            <img src="https://fakeimg.pl/40/FFD93D/FFF/?text=理赔&font=noto" alt="理赔图标" style="width: 40px;">
                             <div class="card-title">理赔报案</div>
                             <div class="card-subtitle">快速处理报案 ></div>
                         </div>
@@ -157,12 +210,12 @@
                     <div class="swiper-wrapper">
                         <!-- Insurance company logos grid -->
                         <div class="grid grid-cols-3 gap-15">
-                            <img src="https://placehold.co/120x60/F8F9FA/666?text=PICC" alt="中国人民保险" class="insurance-logo">
-                            <img src="https://placehold.co/120x60/F8F9FA/666?text=China+Life" alt="中国人寿" class="insurance-logo">
-                            <img src="https://placehold.co/120x60/F8F9FA/666?text=CPIC" alt="太平洋保险" class="insurance-logo">
-                            <img src="https://placehold.co/120x60/F8F9FA/666?text=Ping+An" alt="中国平安" class="insurance-logo">
-                            <img src="https://placehold.co/120x60/F8F9FA/666?text=China+Ins" alt="中华保险" class="insurance-logo">
-                            <img src="https://placehold.co/120x60/F8F9FA/666?text=ZJ+Ins" alt="紫金保险" class="insurance-logo">
+                            <img src="https://fakeimg.pl/120x60/F8F9FA/666/?text=人保&font=noto" alt="中国人民保险" class="insurance-logo">
+                            <img src="https://fakeimg.pl/120x60/F8F9FA/666/?text=人寿&font=noto" alt="中国人寿" class="insurance-logo">
+                            <img src="https://fakeimg.pl/120x60/F8F9FA/666/?text=太平洋&font=noto" alt="太平洋保险" class="insurance-logo">
+                            <img src="https://fakeimg.pl/120x60/F8F9FA/666/?text=平安&font=noto" alt="中国平安" class="insurance-logo">
+                            <img src="https://fakeimg.pl/120x60/F8F9FA/666/?text=中华&font=noto" alt="中华保险" class="insurance-logo">
+                            <img src="https://fakeimg.pl/120x60/F8F9FA/666/?text=紫金&font=noto" alt="紫金保险" class="insurance-logo">
                         </div>
                     </div>
                     <!-- Pagination dots -->
@@ -179,7 +232,7 @@
                             <li>
                                 <div class="item-content">
                                     <div class="item-media">
-                                        <img src="https://placehold.co/60/EAEAEA/999?text=User" width="60" height="60" style="border-radius: 50%;">
+                                        <img src="https://fakeimg.pl/60/EAEAEA/999/?text=用户&font=noto" width="60" height="60" style="border-radius: 50%;">
                                     </div>
                                     <div class="item-inner">
                                         <div class="item-title-row">
@@ -199,19 +252,19 @@
             <!-- Quick Actions Grid -->
             <div class="grid grid-cols-4 grid-gap medium-margin">
                 <a href="/orders" class="grid-item text-align-center" id="orders">
-                    <img src="https://placehold.co/40/FF6B6B/FFF?text=Order" style="border-radius: 8px;">
+                    <img src="https://fakeimg.pl/40/FF6B6B/FFF/?text=订单&font=noto" style="border-radius: 8px;">
                     <div class="grid-item-title">订单/保单</div>
                 </a>
                 <a href="/claims" class="grid-item text-align-center">
-                    <img src="https://placehold.co/40/FFD93D/FFF?text=Claims" style="border-radius: 8px;">
+                    <img src="https://fakeimg.pl/40/FFD93D/FFF/?text=理赔&font=noto" style="border-radius: 8px;">
                     <div class="grid-item-title">理赔报案</div>
                 </a>
                 <a href="/suggestions" class="grid-item text-align-center">
-                    <img src="https://placehold.co/40/4ECDC4/FFF?text=Suggest" style="border-radius: 8px;">
+                    <img src="https://fakeimg.pl/40/4ECDC4/FFF/?text=建议&font=noto" style="border-radius: 8px;">
                     <div class="grid-item-title">投诉建议</div>
                 </a>
                 <a href="/consult" class="grid-item text-align-center">
-                    <img src="https://placehold.co/40/FF8B94/FFF?text=Consult" style="border-radius: 8px;">
+                    <img src="https://fakeimg.pl/40/FF8B94/FFF/?text=顾问&font=noto" style="border-radius: 8px;">
                     <div class="grid-item-title">专属顾问</div>
                 </a>
             </div>
