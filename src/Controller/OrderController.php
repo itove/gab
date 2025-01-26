@@ -68,7 +68,7 @@ class OrderController extends AbstractController
         $studentName = $request->request->get('student_name');
         $studentIdnum = $request->request->get('student_idnum');
         $schoolId = $request->request->get('school_id');
-        $school = $this->doctrine->getRepository(School)->find($schoolId);
+        $school = $this->doctrine->getRepository(School::class)->find($schoolId);
         $grade = $request->request->get('grade');
         $class = $request->request->get('class');
         $parentName = $request->request->get('parent_name');

@@ -177,8 +177,8 @@
 {% block javascripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Use existing Framework7 instance
-        const app = Framework7.instance;
+        // Get the Framework7 instance
+        const app = window.app;  // Access the global Framework7 instance
 
         // Form submission handler
         const form = document.getElementById('order-form');
@@ -187,10 +187,26 @@
             const submitButton = form.querySelector('button[type="submit"]');
             const url = submitButton.dataset.url;
             
-            const formData = new FormData(form);
-            app.request.post(url, formData, function(response) {
-                // Handle response here
-                console.log(response);
+            // Use regular fetch API instead of Framework7's request
+            fetch(url, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle successful response
+                console.log(data);
+                if (data.success) {
+                    // Redirect to orders page or show success message
+                    window.location.href = '/orders';
+                } else {
+                    // Show error message
+                    app.dialog.alert(data.message || '提交失败，请重试');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                app.dialog.alert('提交失败，请重试');
             });
         });
 
