@@ -201,6 +201,21 @@
                 return; // Stop form submission
             }
 
+            // Validate Chinese ID number format only if not empty
+            const idNumPattern = /^(?:\d{15}|\d{17}[\dX])$/; // 15 or 18 digits, last can be X
+            const studentIdNum = form.querySelector('input[name="student_idnum"]').value;
+            const parentIdNum = form.querySelector('input[name="parent_id"]').value;
+
+            if (studentIdNum && !idNumPattern.test(studentIdNum)) {
+                app.dialog.alert('学生证件号码格式不正确，请输入有效的身份证号码'); // Alert if student ID number is invalid
+                return; // Stop form submission
+            }
+
+            if (parentIdNum && !idNumPattern.test(parentIdNum)) {
+                app.dialog.alert('家长证件号码格式不正确，请输入有效的身份证号码'); // Alert if parent ID number is invalid
+                return; // Stop form submission
+            }
+
             // Use regular fetch API instead of Framework7's request
             fetch(url, {
                 method: 'POST',
