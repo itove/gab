@@ -80,6 +80,7 @@ class Sms
         } else {
             $list = [$phone];
         }
+
         foreach ($list as $to) {
             $sendSmsRequest = new SendSmsRequest([
                 "phoneNumbers" => $to,
