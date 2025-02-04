@@ -33,8 +33,7 @@ class Allinpay
     
     public function createOrder()
     {
-        // $url = 'https://syb-test.allinpay.com/apiweb/h5unionpay/unionorder';
-        $url = 'https://gab.dev.itove.com/test/pay';
+        $url = 'https://syb-test.allinpay.com/apiweb/h5unionpay/unionorder';
 
         $sn = strtoupper(str_replace('.', '', uniqid('', true)));
         $rand  = bin2hex(random_bytes(16));
@@ -51,9 +50,9 @@ class Allinpay
             'notify_url' => 'https://gab.dev.itove.com/notify',
         ];
         $data['sign'] = self::sign($data);
+        // $headers[] = 'Accept: application/json';
 
-        // $content = $this->httpClient->request('POST', $url, ['json' => $data])->toArray();
-        $content = $this->httpClient->request('POST', $url, ['body' => $data])->toArray();
+        $content = $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $data])->toArray();
 
         return $content;
     }
