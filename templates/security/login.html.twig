@@ -152,6 +152,14 @@
                 text: 'OK'
             }]
         });
+
+        const failDialog = app.dialog.create({
+            title: title
+            text: '验证码发送失败！',
+            buttons: [{
+                text: '错误'
+            }]
+        });
         
         function startCountdown(duration) {
             let timeLeft = duration;
@@ -193,11 +201,32 @@
             // Send code without preloader
             sendCodeBtn.disabled = true;
             
+            fetch('/api/otp/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ _phone: phone }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 'OK') {
+                    successDialog.open();
+                    startCountdown(60);
+                } else {
+                    failDialog.open();
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                failDialog.open();
+            });
+
             // Simulate API call
-            setTimeout(() => {
-                startCountdown(60);
-                successDialog.open();
-            }, 1000);
+            // setTimeout(() => {
+            //     startCountdown(60);
+            //     successDialog.open();
+            // }, 1000);
         });
     });
 </script>
