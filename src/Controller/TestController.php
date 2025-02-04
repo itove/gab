@@ -6,15 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Service\Sms;
 
+#[Route('/test')]
 final class TestController extends AbstractController
 {
-    public function __construct(HttpClientInterface $client)
+    public function __construct(HttpClientInterface $client, Sms $sms)
     {
         $this->httpClient = $client;
+        $this->sms = $sms;
     }
 
-    #[Route('/test', name: 'app_test')]
+    #[Route('/pay', name: 'app_test_pay')]
     public function index(): Response
     {
         $url = 'https://syb-test.allinpay.com/apiweb/unitorder/pay';
@@ -33,6 +36,14 @@ final class TestController extends AbstractController
             'notify_url' => 'https://gab.dev.itove.com/notify'
         ];
 
+        return $this->render('test/index.html.twig', [
+            'controller_name' => 'TestController',
+        ]);
+    }
+
+    #[Route('/sms', name: 'app_test_sms')]
+    public function sms(): Response
+    {
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
         ]);
