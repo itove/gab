@@ -44,7 +44,7 @@ final class TestController extends AbstractController
     #[Route('/sms', name: 'app_test_sms')]
     public function sms(): Response
     {
-        $this->sms->send('13207262011');
+        $this->sms->send('13207262011', 'verify');
 
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',

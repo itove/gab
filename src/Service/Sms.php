@@ -72,7 +72,7 @@ class Sms
             $params = ['code' => $code];
         }
 
-        $templateParam = json_encode($params, JSON_UNESCAPED_UNICODE);
+        $templateParam = empty($params) ? '' : json_encode($params, JSON_UNESCAPED_UNICODE);
 
         if ($cc) {
             $list = $this->em->getRepository(Conf::class)->find(1)->getCc();
