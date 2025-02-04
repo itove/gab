@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Service\Sms;
+use App\Service\Allinpay;
 
 #[Route('/test')]
 final class TestController extends AbstractController
@@ -18,23 +19,10 @@ final class TestController extends AbstractController
     }
 
     #[Route('/pay', name: 'app_test_pay')]
-    public function index(): Response
+    public function index(Allinpay $allinpay): Response
     {
-        $url = 'https://syb-test.allinpay.com/apiweb/unitorder/pay';
-        $sn = strtoupper(str_replace('.', '', uniqid('', true)));
-        $rand  = bin2hex(random_bytes(16));
-        
-        $data = [
-            'cusid' => '5505810078000YD',
-            'appid' => '00002811',
-            'trxamt' => '10',
-            'reqsn' => $sn,
-            'paytype' => 'W03',
-            'randomstr' => $rand,
-            'signtype' => 'RSA',
-            'sign' => $sig,
-            'notify_url' => 'https://gab.dev.itove.com/notify'
-        ];
+        // $url = 'https://syb-test.allinpay.com/apiweb/unitorder/pay';
+        $allinpay->createOrder();
 
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
