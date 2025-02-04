@@ -38,6 +38,7 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
         $cache = new RedisAdapter(RedisAdapter::createConnection('redis://localhost'));
         $cacheItem = $cache->getItem($phone);
         $otp = (string) $cacheItem->get();
+        // dump($phone);
         // dump($otp);
         // dump($_otp);
 
