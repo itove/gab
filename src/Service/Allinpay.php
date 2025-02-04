@@ -52,7 +52,8 @@ class Allinpay
         $data['sign'] = self::sign($data);
         // $headers[] = 'Accept: application/json';
 
-        $content = $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $data])->toArray();
+        // $content = $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $data])->toArray();
+        $content = $this->httpClient->request('POST', $url, ['body' => $data])->toArray();
 
         return $content;
     }
