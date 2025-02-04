@@ -15,6 +15,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\CacheItem;
 
 class LoginFormAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
@@ -30,17 +32,21 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
 
     public function authenticate(Request $request): Passport
     {
-        $identifier = $request->request->get('_phone', '');
-        $otp = $request->request->get('_otp', '');
-        dump($identifier);
+        $phone = $request->request->get('_phone', '');
+        $_otp = $request->request->get('_otp', '');
+
+        $cache = new RedisAdapter(RedisAdapter::createConnection('redis://localhost'));
+        $cacheItem = $cache->getItem($phone);
+        $otp = $cacheItem->get();
         dump($otp);
+        dump($_otp);
 
         // generate logic to validate the OTP is correct for this user
-        if ($otp !== '1234') {
+        if ($otp !== $_otp) {
             throw new AuthenticationException('Invalid OTP');
         }
-
-        return new SelfValidatingPassport(new UserBadge($identifier));
+    
+        return new SelfValidatingPassport(new UserBadge($phone));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
