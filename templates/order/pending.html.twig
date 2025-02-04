@@ -3,9 +3,45 @@
 {% block title %}订单支付{% endblock %}
 
 {% block body %}
-  <div>支付确认</div>
-  <div>订单号：{{ sn }}</div>
-  <div>产品： 关爱保</div>
-  <button>已完成支付</button>
-  <button>立即支付</button>
-{% endblock %} 
+<div class="page">
+    <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+            <div class="left"><a href="#" class="link back"><i class="icon icon-back"></i></a></div>
+            <div class="title">支付确认</div>
+            <div class="right"></div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="block padding-vertical bg-color-white">
+            <div class="block-title text-align-center">订单详情</div>
+            <div class="list" style="margin-bottom: 0;">
+                <ul>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">订单号</div>
+                            <div class="item-input-wrap">
+                                <input type="text" value="{{ sn }}" readonly>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">产品</div>
+                            <div class="item-input-wrap">
+                                <input type="text" value="关爱保" readonly>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="block">
+            <div class="grid grid-cols-2 grid-gap">
+                  <button class="button button-large button-round button-outline">已完成支付</button>
+                  <button class="button button-large button-round button-fill" style="">立即支付</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
