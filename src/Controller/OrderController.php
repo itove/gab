@@ -45,7 +45,8 @@ class OrderController extends AbstractController
         }
 
         return $this->render('order/new.html.twig', [
-            'grades' => $grades
+            'grades' => $grades,
+            'school_id' => $schoolId,
         ]);
     }
 
