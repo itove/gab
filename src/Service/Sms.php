@@ -52,46 +52,11 @@ class Sms
 
     public function send($phone, $type = 'verify', $params = [], $cc = false)
     {
-        switch($type){
-            case 'settle_notify':
-                $templateCode = 'SMS_276330229';
-                break;
-            case 'voucher_notify':
-                $templateCode = 'SMS_276385464';
-                break;
-            case 'expiry':
-                $templateCode = 'SMS_276310470';
-                break;
-            case 'customer_draw':
-                $templateCode = 'SMS_276475441';
-                break;
-            case 'store_draw':
-                $templateCode = 'SMS_276400472';
-                break;
-            case 'verify':
-                $templateCode = 'SMS_268695017';
-                break;
-            case 'login':
-                $templateCode = 'SMS_211140348';
-                break;
-            case 'alert':
-                $templateCode = 'SMS_211140347';
-                break;
-            case 'regsiter':
-                $templateCode = 'SMS_211140346';
-                break;
-            case 'passwd':
-                $templateCode = 'SMS_211140345';
-                break;
-            case 'usermod':
-                $templateCode = 'SMS_211140344';
-                break;
-            case 'orgReg':
-                $templateCode = 'SMS_268470767';
-                break;
-            default:
-                $templateCode = 'SMS_211140348';
-        }
+        $templateCode = match ($type) {
+            'verify' => 'SMS_478475575',
+            'paid' => 'SMS_478615591',
+            default => 'SMS_478475575',
+        };
 
         if ($type == 'verify') {
             $code = mt_rand(100000, 999999);
@@ -106,6 +71,7 @@ class Sms
 
             $params = ['code' => $code];
         }
+
         $templateParam = json_encode($params, JSON_UNESCAPED_UNICODE);
 
         if ($cc) {
