@@ -14,6 +14,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 class LoginFormAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
@@ -30,12 +31,16 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
     public function authenticate(Request $request): Passport
     {
         $identifier = $request->request->get('_phone', '');
-        $password = $request->request->get('_password', '');
+        $otp = $request->request->get('_otp', '');
+        dump($identifier);
+        dump($otp);
 
-        return new Passport(
-            new UserBadge($identifier),
-            new PasswordCredentials($password)
-        );
+        // generate logic to validate the OTP is correct for this user
+        if ($otp !== '1234') {
+            throw new AuthenticationException('Invalid OTP');
+        }
+
+        return new SelfValidatingPassport(new UserBadge($identifier));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -56,4 +61,4 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
     {
         return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }
-} 
+}
