@@ -40,16 +40,14 @@ class ApiController extends AbstractController
 
         $phone = isset($params['_phone']) ? $params['_phone'] : null;
         
-        $code = 1;
+        $code = 'err';
 
         if ($phone) {
-            $sms->send($phone);
-            $code = 0;
+            $code = $sms->send($phone);
         }
 
         $data = [
             'code' => $code,
-            'msg' => 'ok',
         ];
 
         return $this->json($data);

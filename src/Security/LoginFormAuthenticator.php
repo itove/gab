@@ -37,11 +37,10 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
 
         $cache = new RedisAdapter(RedisAdapter::createConnection('redis://localhost'));
         $cacheItem = $cache->getItem($phone);
-        $otp = $cacheItem->get();
-        dump($otp);
-        dump($_otp);
+        $otp = (string) $cacheItem->get();
+        // dump($otp);
+        // dump($_otp);
 
-        // generate logic to validate the OTP is correct for this user
         if ($otp !== $_otp) {
             throw new AuthenticationException('Invalid OTP');
         }
