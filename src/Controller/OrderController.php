@@ -63,6 +63,14 @@ class OrderController extends AbstractController
         ]);
     }
 
+    #[Route('/order/pending', name: 'app_order_pending')]
+    public function pending(Request $request): Response
+    {
+        $sn = $request->query->get('sn');
+
+        return $this->render('order/pending.html.twig', ['sn' => $sn]);
+    }
+
     #[Route('/order/create', name: 'app_order_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
@@ -93,13 +101,15 @@ class OrderController extends AbstractController
             $order->setApplicant($this->getUser());
             $order->setProduct($product);
             $entityManager->persist($order);
+            $sn = $order->getSn();
 
             $entityManager->flush();
 
             return new JsonResponse([
                 'success' => true,
                 'message' => 'Order created successfully',
-                'redirectUrl' => $this->generateUrl('app_orders')
+                'redirectUrl' => $this->generateUrl('app_order_pending', ['sn' => $sn]),
+                'sn' => $sn,
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([

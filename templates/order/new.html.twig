@@ -227,7 +227,7 @@
                 console.log(data);
                 if (data.success) {
                     // Redirect to orders page or show success message
-                    window.location.href = '/orders';
+                    window.location.href = data.redirectUrl;
                 } else {
                     // Show error message
                     app.dialog.alert(data.message || '提交失败，请重试');
