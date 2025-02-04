@@ -106,6 +106,8 @@ class OrderController extends AbstractController
 
             $entityManager->flush();
 
+            // allin pay here
+
             return new JsonResponse([
                 'success' => true,
                 'message' => 'Order created successfully',
