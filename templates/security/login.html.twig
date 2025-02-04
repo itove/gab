@@ -153,11 +153,11 @@
             }]
         });
 
-        const failDialog = app.dialog.create({
-            title: title
-            text: '验证码发送失败！',
+        const createFailDialog = (text) => app.dialog.create({
+            title: '验证码发送失败',
+            text: text,
             buttons: [{
-                text: '错误'
+                text: '确定'
             }]
         });
         
@@ -214,11 +214,13 @@
                     successDialog.open();
                     startCountdown(60);
                 } else {
+                    const failDialog = createFailDialog(data.msg + '<br/>' + data.code);
                     failDialog.open();
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
+                const failDialog = createFailDialog(data.msg + '<br/>' + data.code);
                 failDialog.open();
             });
 

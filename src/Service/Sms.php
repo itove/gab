@@ -101,6 +101,6 @@ class Sms
             );
         }
         
-        return $resp->body->code;
+        return ['code' => $resp->body->code, 'msg' => $resp->body->message];
     }
 }
