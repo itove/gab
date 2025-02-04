@@ -21,10 +21,10 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): RedirectResponse
     {
         // Check if there's a requested URL in the session
-        if ($targetPath = $this->requestStack->getSession()->get('_security.main.target_path')) {
-            $this->requestStack->getSession()->remove('_security.main.target_path');
-            return new RedirectResponse($targetPath);
-        }
+        // if ($targetPath = $this->requestStack->getSession()->get('_security.main.target_path')) {
+        //     $this->requestStack->getSession()->remove('_security.main.target_path');
+        //     return new RedirectResponse($targetPath);
+        // }
 
         // Check which firewall was used (admin or main)
         $firewall = $this->getFirewallName($request);
