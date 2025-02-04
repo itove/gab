@@ -89,13 +89,17 @@ class OrderController extends AbstractController
         try {
             $entityManager = $this->doctrine->getManager();
             
-            $insured = new Insured();
-            $insured->setSchool($school);
-            $insured->setIdnum($studentIdnum);
-            $insured->setName($studentName);
-            $insured->setGrade($grade);
-            $insured->setClass($class);
-            $entityManager->persist($insured);
+            $insured = $this->doctrine->getRepository(Insured::class)->findOneBy(['idnum' => $studentIdnum]);
+            
+            if (!$insured) {
+                $insured = new Insured();
+                $insured->setSchool($school);
+                $insured->setIdnum($studentIdnum);
+                $insured->setName($studentName);
+                $insured->setGrade($grade);
+                $insured->setClass($class);
+                $entityManager->persist($insured);
+            }
 
             $order = new Order();
             $order->setInsured($insured);
