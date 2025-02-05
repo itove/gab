@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Service\Sms;
@@ -21,11 +22,16 @@ final class TestController extends AbstractController
     #[Route('/pay', name: 'app_test_pay')]
     public function index(Allinpay $allinpay): Response
     {
-        // $url = 'https://syb-test.allinpay.com/apiweb/unitorder/pay';
-        $allinpay->createOrder();
+        $resp = $allinpay->createOrder();
+        // dump($resp);
+        
+        $url = $resp->getInfo('url');
+        dump($url);
+
+        // return $this->redirect($url);
 
         return $this->render('test/index.html.twig', [
-            'controller_name' => 'TestController',
+            'url' => $url,
         ]);
     }
 

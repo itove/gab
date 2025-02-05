@@ -33,14 +33,17 @@ class Allinpay
     
     public function createOrder()
     {
-        $url = 'https://syb-test.allinpay.com/apiweb/h5unionpay/unionorder';
+        // $url = "https://vsp.allinpay.com/apiweb/h5unionpay/unionorder";
+        // $url = 'https://syb-test.allinpay.com/apiweb/h5unionpay/unionorder';
+        $url = 'https://syb.allinpay.com/apiweb/h5unionpay/unionorder';
 
         $sn = strtoupper(str_replace('.', '', uniqid('', true)));
         $rand  = bin2hex(random_bytes(16));
         
         $data = [
-            'cusid' => '990440148166000',
-            'appid' => '00000003',
+            'cusid' => '660290063002ED6',
+            'appid' => '00315248',
+            'version' => '12',
             'trxamt' => '10',
             'reqsn' => $sn,
             // 'paytype' => 'W03',
@@ -53,24 +56,29 @@ class Allinpay
         // $headers[] = 'Accept: application/json';
 
         // $content = $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $data])->toArray();
-        $content = $this->httpClient->request('POST', $url, ['body' => $data])->toArray();
+        // $content = $this->httpClient->request('POST', $url, ['body' => $data])->toArray();
+        $resp = $this->httpClient->request('POST', $url, ['body' => $data]);
+        $resp->getContent();
+        // dump($resp);
+        dump($resp->getInfo());
+        // dump($resp->getInfo('url'));
 
-        return $content;
+        return $resp;
     }
     
     public function sign(array $array)
     {
-        dump($array);
+        // dump($array);
         ksort($array);
-        dump($array);
+        // dump($array);
         $bufSignSrc = self::ToUrlParams($array);
         dump($bufSignSrc);
-		$private_key='MIICXAIBAAKBgQDtB6T1D/nh5P/wWumTnj76GVQ6TgkbbfeN6HlXwk5ZcnuN26o2tY1SGnm19DIF/sj2J1iECDifbm0h9EeIsmPctfx0dNKpFKX1t/9LrAT7fap+69MbRR3q4VQneHU9qym9jnOSISjoNOXMPwZjBaITJBbKrdI5a1FyPMyTpSyHMQIDAQABAoGAPZbf6QGGt4iubEDjMoVK7eeI+EFwolz3lzsR1JjbjOhvbFPoraCNIQlaGMpj+STUCQn+OQh91gd2ef0kXUOlKKNXI2qOnAqITy8TEnyYJbGQh3JDx+d6NuUShM2uJ4yICgvsjexwIWpyspocP8mEOotGl6t/MxSJPHYzLRO0esUCQQD+o7zcu1ITyjua8RhSkfjL72zt6p2B+sdI2QhmNxZcbhn22r7njohbTHiuuxbg7+vN3XFCovjOPMkeJB+QnyLrAkEA7kvSheppZt5BwImVoFYRPFVTWBqUSwkQ4ACpuCJxpr5OZlL/jtcgLQBVQBB1iIA+GsAuxKn9WBa0hfyLfR1fUwJBALF4lOyScYXxcNFwLy99JRWdbSH0Xop0qegPu1biFeedpOLzWhIwuMBI7+N36V4kWQhFyeZTh2zV2KX1LzqwbrkCQDqaMPK3/CXNINRtwXtFz0VMIov3NWLinuDHqPVcmyCLipJFdQ22v/XxMAXqRk1EZIGFo7q/p0sjgk+1FMS3FXsCQDy4oPHVXyqbIjcGLr3hGDHBWjucaEboge7/gjJr8abrivq6xUvne0XZsA25wYg1eCZE4BTm1IhrwezLUvixn4c=';
-        dump($private_key);
+		$private_key='MIIEpAIBAAKCAQEAtLmCSjRIu/QmJacbDrdng0SVXu4Jmm2HbdIQzYw7aOexdyk1RmgB/fBNbwmmhMO5CfFjjwxGCrBOB3sz14o4R6Hn2q4i2bJdLU7Tqw8pnYJ5HCSFP14z4Zyu/PwoB/bQvUW9EVLZlvgbYyBBnHDypN/NAWcD986FTZ6aUzljEzmv4+j0qjnZE2ChgHENSUOPie6RG+rtqUcVNqnc66I23vJZlKlv5Y1Ptc5eYayWUVqiVXagBMCxCL4OCiAzSrkxYAAQSbJcEL7reIxA/eDQU9zY2zpVc9I6zoa7dD42Bzb5HeJLlBQmgb6rVKQFonRcR7FvZ8B/mp3mWl28Kra8awIDAQABAoIBAE8aB1INUmyZ73x5iNlHI1KMWUjErYVfPXCvClW9dF91UfLTIZNggMayQGJCehUQSdR1SFtbRuj0xCJ4JXfI8ts/nWjU4UIh1LC5GOJ9b3yWmAXeYkgbJmAwoVLv12GtAS5m8Ns9RSnUDMC1ZKJhuYK6xlM/0LfNOAGCUw/sRVYrJGlrZzbwakZoZN3q/lGcPWS3ys/0O3NwjTuzpmgHR5oFnePJbpWiQXuFG9giU6sm5hDjDEv5WOv2oZsOK5l3SOmE72i9C8uf5uaat47dZTU94xMWXB1idnlGmh6WBy1hGlspbmJ54aPkiZbquPjnP0R8W+ugBck486rhTMS+jNkCgYEA2SEgbDV/iTiN64UMG7kO+IZftvcfOQ94ebEoMp+rWm3IXmBzJ/z0aLwEthVX4wW0sIXAyZIhKlewVhRLIqtm0EToyz2ksgvUH1w0xrs+hzwjQ/Ef+WzYjswIaijARc+F0uhU5qypKUannjiYtDwJueod5i9ZJ1G549vS9vq3wG8CgYEA1RP69bmMUCINfD8Y1Uj3ArlwLH4aYWZ//ECOgbOyZTwGgc8YI7OBtx2R3fD6V2CmyBLCXbdxfo8AaDRgmluYOCKUdq3lRFhUF9SuYhZlPbnfr8TCRcoj+/5g6GBiCJGmET4830lsuDFVfecOeCUPbti883wbC6E6WwJd1FmQScUCgYEAuqLD6N+Pcdcf/ntNriLDIJL4gSAoQXbv2sKRx/oBY2iMW7tSIORI/iHndtAfzG+iIj3GOj2WrnvTghpNf06PwKQK6nBhOf365r3uS4i1ta7WrVb9YfvSpePxs7a1lwxLfr/gAqwVd/pYqCMD96DHx3vbGXpHiwmv3JGe5FccTZcCgYEAwIHeuGa82CEL4fb3rqrPUAzNxcTgfKMoenSwy4nYYRIMJvc9rfOd/ByhDs2Kv6q4xAX+yMDVryvviDXaGVsreXv0egy+GDNdNnKWYlQtf8kQyTKQ+pCYVjEKyKdbqrY8PVPnlyw1J2ya+rboIbAJ83GptKmpnaY6nMLUluecLqkCgYBtGmdz83eBEykqWf/sqe9kjSr6EUwCXhjdHF5DHsiIXMpCWdBKPsIkPSBYOLBp+pIcs8gHfNY04tLSHMXnAOIEhsINf8AkU2e+6ryazHOl00dRgdyPc5IHvL2bMiE3EAWnuScJAUEA0DWYq2C6HuOU2374JhyGyulSWN10WsVQ4Q==';
+        // dump($private_key);
         $private_key = chunk_split($private_key , 64, "\n");
-        dump($private_key);
+        // dump($private_key);
         $key = "-----BEGIN RSA PRIVATE KEY-----\n".wordwrap($private_key)."-----END RSA PRIVATE KEY-----";
-        dump($key);
+        // dump($key);
         if(openssl_sign($bufSignSrc, $signature, $key, 'sha256WithRSAEncryption' )){
             dump('success');
         }else{
