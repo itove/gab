@@ -49,8 +49,8 @@ class Allinpay
             // 'paytype' => 'W03',
             'randomstr' => $rand,
             'signtype' => 'RSA',
-            'returl' => '/order/pending',
-            'notify_url' => 'https://gab.dev.itove.com/notify',
+            'returl' => 'https://jz.hbdtjj.com/order/pending',
+            'notify_url' => 'https://jz.hbdtjj.com/api/order/notify',
         ];
         $data['sign'] = self::sign($data);
         // $headers[] = 'Accept: application/json';
