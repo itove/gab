@@ -1,6 +1,5 @@
 monolog:
-    channels:
-        - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+    channels: ['sms', 'deprecation']
 
 when@dev:
     monolog:
@@ -60,3 +59,8 @@ when@prod:
                 channels: [deprecation]
                 path: php://stderr
                 formatter: monolog.formatter.json
+            sms:
+                type: stream
+                path: "%kernel.logs_dir%/sms.log"
+                level: info
+                channels: [sms]
