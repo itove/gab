@@ -143,3 +143,10 @@ Grade: 年级
 Class: 班级
 Idnum: 身份证号
 Payment Sn: 通联支付订单号
+Applicant: 投保人
+Applicant.Idnum: 投保人身份证号
+Applicant.Phone: 投保人电话
+Insured.Idnum: 被保人身份证号
+Insured.School: 被保人学校
+Insured.Grade: 被保人年级
+Insured.Class: 被保人班级
