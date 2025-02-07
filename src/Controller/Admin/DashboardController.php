@@ -76,14 +76,25 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
-        yield MenuItem::linkToCrud('Insured', 'fas fa-list', Insured::class);
-        yield MenuItem::linkToCrud('Order', 'fas fa-list', Order::class);
-        yield MenuItem::linkToCrud('Product', 'fas fa-list', Product::class);
-        yield MenuItem::linkToCrud('School', 'fas fa-list', School::class);
+
+        yield MenuItem::section('Info Management');
+
+        yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
+        yield MenuItem::linkToCrud('Insured', 'fas fa-user-graduate', Insured::class);
+        yield MenuItem::linkToCrud('Order', 'fas fa-dollar', Order::class);
+        yield MenuItem::linkToCrud('Product', 'fas fa-paperclip', Product::class);
+        yield MenuItem::linkToCrud('School', 'fas fa-school', School::class);
         yield MenuItem::linkToCrud('Stage', 'fas fa-list', Stage::class);
-        yield MenuItem::linkToCrud('Admin', 'fas fa-list', User::class)
+
+        yield MenuItem::section('Settings');
+
+        yield MenuItem::linkToCrud('Admin', 'fas fa-user-cog', User::class)
             ->setController(AdminCrudController::class);
         ;
+        yield MenuItem::linkToCrud('Change Password', 'fas fa-key', User::class)
+            ->setController(ChpwCrudController::class)
+            ->setAction('edit')
+            ->setEntityId($this->getUser()->getId())
+            ;
     }
 }

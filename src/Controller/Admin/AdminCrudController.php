@@ -38,7 +38,7 @@ class AdminCrudController extends AbstractCrudController
         yield TextField::new('name');
         yield TextField::new('plainPassword')
             ->onlyOnForms()
-        ;
+            ->setHelp('留空则新管理员默认密码为111111');
         // yield TextField::new('phone');
         // yield TextField::new('idnum');
     }
