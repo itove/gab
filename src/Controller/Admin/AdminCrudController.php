@@ -36,6 +36,9 @@ class AdminCrudController extends AbstractCrudController
         yield IdField::new('id')->onlyOnIndex();
         yield TextField::new('username');
         yield TextField::new('name');
+        yield TextField::new('plainPassword')
+            ->onlyOnForms()
+        ;
         // yield TextField::new('phone');
         // yield TextField::new('idnum');
     }
