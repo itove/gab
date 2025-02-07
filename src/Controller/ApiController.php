@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Sms;
+use App\Service\Allinpay;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -45,6 +46,17 @@ class ApiController extends AbstractController
         } else {
             $resp = ['code' => 'err', 'msg' => '未知错误'];
         }
+
+        return $this->json($resp);
+    }
+
+    #[Route('/order/notify', methods: ['POST'])]
+    public function order_notify(Request $request): Response
+    {
+        $params = $request->toArray();
+        dump($params);
+        
+        $resp = ['code' => 0];
 
         return $this->json($resp);
     }
