@@ -51,12 +51,11 @@ class AdminCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        $crud
-            ->setPageTitle('index', '管理员')
-            ->setPageTitle('new', '新增管理员')
-            ->setPageTitle('edit', ' 编辑管理员')
+        return $crud
+            ->setEntityLabelInSingular('管理员')
+            ->setEntityLabelInPlural('管理员')
+            // ->setPageTitle('new', '新建管理员')
         ;
-        return $crud;
     }
 
     public function createEntity(string $entityFqcn)
