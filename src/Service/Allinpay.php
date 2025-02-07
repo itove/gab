@@ -31,7 +31,7 @@ class Allinpay
         $this->em = $em;
     }
     
-    public function createOrder()
+    public function createOrder(string $sn)
     {
         // $url = "https://vsp.allinpay.com/apiweb/h5unionpay/unionorder";
         // $url = 'https://syb-test.allinpay.com/apiweb/h5unionpay/unionorder';
@@ -40,7 +40,6 @@ class Allinpay
         // 统一支付API
         // $url = 'https://vsp.allinpay.com/apiweb/unitorder/pay';
 
-        $sn = strtoupper(str_replace('.', '', uniqid('', true)));
         $rand  = bin2hex(random_bytes(16));
         
         $data = [
@@ -52,8 +51,9 @@ class Allinpay
             // 'paytype' => 'W03',
             'randomstr' => $rand,
             'signtype' => 'RSA',
-            'returl' => 'https://jz.hbdtjj.com/order/pending',
-            'notify_url' => 'https://jz.hbdtjj.com/api/order/notify',
+            'returl' => 'https://jz.hbdtjj.com/order/complete',
+            // 'notify_url' => 'https://jz.hbdtjj.com/api/order/notify',
+            'notify_url' => 'https://gab.dev.itove.com/api/order/notify',
         ];
         $data['sign'] = self::sign($data);
         // $resp = $this->httpClient->request('POST', $url, ['body' => $data]);

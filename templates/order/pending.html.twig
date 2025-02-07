@@ -21,7 +21,7 @@
                         <div class="item-inner">
                             <div class="item-title item-label">订单号</div>
                             <div class="item-input-wrap">
-                                <input type="text" value="{{ sn }}" readonly>
+                                <input type="text" value="{{ data.reqsn }}" readonly>
                             </div>
                         </div>
                     </li>
@@ -36,12 +36,34 @@
                 </ul>
             </div>
         </div>
+  <form action="https://syb.allinpay.com/apiweb/h5unionpay/unionorder" method="POST" target="_blank" style="display: none;">
+    {% for k, v in data %}
+    <input name="{{k}}" value="{{v}}" readOnly />
+    {% endfor %}
+    <input type="submit" \>
+  </form>
+
         <div class="block">
             <div class="grid grid-cols-2 grid-gap">
                   <button class="button button-large button-round button-outline">已完成支付</button>
-                  <button class="button button-large button-round button-fill" style="">立即支付</button>
+                  <button class="button button-large button-round button-fill" id="btn-pay">立即支付</button>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Auto submit form on page load
+    document.querySelector('form').submit();
+
+    // Keep manual button click handler
+    const payButton = document.getElementById('btn-pay');
+    payButton.addEventListener('click', () => {
+        document.querySelector('form').submit();
+    });
+});
+</script>
 {% endblock %}

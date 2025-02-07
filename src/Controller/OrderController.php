@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OrderRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Service\Allinpay;
 
 class OrderController extends AbstractController
 {
@@ -65,11 +66,13 @@ class OrderController extends AbstractController
     }
 
     #[Route('/order/pending', name: 'app_order_pending')]
-    public function pending(Request $request): Response
+    public function pending(Request $request, Allinpay $allinpay): Response
     {
         $sn = $request->query->get('sn');
+        $data = $allinpay->createOrder($sn);
 
-        return $this->render('order/pending.html.twig', ['sn' => $sn]);
+        // dump($data);
+        return $this->render('order/pending.html.twig', ['data' => $data]);
     }
 
     #[Route('/order/create', name: 'app_order_create', methods: ['POST'])]
@@ -85,6 +88,9 @@ class OrderController extends AbstractController
         $class = $request->request->get('class');
         $parentName = $request->request->get('parent_name');
         $parentId = $request->request->get('parent_id');
+        $user = $this->getUser();
+        $user->setName($parentName);
+        $user->setIdnum($parentId);
 
         try {
             $entityManager = $this->doctrine->getManager();
@@ -103,7 +109,7 @@ class OrderController extends AbstractController
 
             $order = new Order();
             $order->setInsured($insured);
-            $order->setApplicant($this->getUser());
+            $order->setApplicant($user);
             $order->setProduct($product);
             $entityManager->persist($order);
             $sn = $order->getSn();
