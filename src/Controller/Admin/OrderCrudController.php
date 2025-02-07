@@ -13,9 +13,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 
 class OrderCrudController extends AbstractCrudController
 {
+    const ORDER_STATUSES = ['待付款' => 0, '已支付' => 1];
+
     public static function getEntityFqcn(): string
     {
         return Order::class;
@@ -36,7 +40,7 @@ class OrderCrudController extends AbstractCrudController
         yield TextField::new('insured.class');
         yield AssociationField::new('product');
         yield MoneyField::new('amount')->setCurrency('CNY');
-        yield ChoiceField::new('status')->setChoices(['待付款' => 0, '已支付' => 1]);
+        yield ChoiceField::new('status')->setChoices(self::ORDER_STATUSES);
         yield DatetimeField::new('createdAt');
         yield DatetimeField::new('PaidAt');
     }
@@ -47,6 +51,23 @@ class OrderCrudController extends AbstractCrudController
             ->disable('new')
             ->disable('edit')
             ->disable('delete')
+        ;
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('sn')
+            ->add('PaymentSn')
+            ->add('applicant')
+            // ->add('applicant.idnum')
+            //->add('applicant.phone')
+            //->add('insured')
+            //->add('insured.idnum')
+            //->add('insured.school')
+            ->add(ChoiceFilter::new('status')->setChoices(self::ORDER_STATUSES))
+            ->add('createdAt')
+            ->add('PaidAt')
         ;
     }
 }

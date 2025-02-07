@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -45,6 +46,15 @@ class UserCrudController extends AbstractCrudController
             ->disable('new')
             ->disable('edit')
             ->disable('delete')
+        ;
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('name')
+            ->add('phone')
+            ->add('idnum')
         ;
     }
 }
