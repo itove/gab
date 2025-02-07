@@ -37,6 +37,10 @@ security:
                 path: app_logout
             access_denied_handler: App\Security\AccessDeniedHandler
             entry_point: App\Security\LoginFormAuthenticator
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 31536000 # 1 year in seconds
+                always_remember_me: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
