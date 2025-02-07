@@ -2,7 +2,7 @@
 <div class="example-wrapper">
   <form action="https://syb.allinpay.com/apiweb/h5unionpay/unionorder" method="POST">
     {% for k, v in data %}
-    <input name="{{k}}" value="{{v}}" />
+    <input name="{{k}}" value="{{v}}" readOnly />
     {% endfor %}
     <input type="submit" \>
   </form>
