@@ -29,11 +29,19 @@ class UserListener extends AbstractController
 
     public function prePersist(User $user, LifecycleEventArgs $event): void
     {
+        // Set default password if not provided
         if (is_null($user->getPlainPassword())) {
             $user->setPlainPassword('111111');
         }
+        
+        // Hash password and clear plain password
         $user->setPassword($this->hasher->hashPassword($user, $user->getPlainPassword()));
         $user->eraseCredentials();
+        
+        // Set isAdmin based on roles
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            $user->setIsAdmin(true);
+        }
     }
 
     public function postPersist(User $user, LifecycleEventArgs $event): void
@@ -42,9 +50,15 @@ class UserListener extends AbstractController
     
     public function preUpdate(User $user, PreUpdateEventArgs $event): void
     {
+        // Handle password updates
         if ($event->hasChangedField('plainPassword')) {
             $user->setPassword($this->hasher->hashPassword($user, $user->getPlainPassword()));
             $user->eraseCredentials();
+        }
+        
+        // Update isAdmin based on roles
+        if ($event->hasChangedField('roles')) {
+            $user->setIsAdmin(in_array('ROLE_ADMIN', $user->getRoles()));
         }
     }
 }
