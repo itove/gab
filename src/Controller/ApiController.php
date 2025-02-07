@@ -83,7 +83,7 @@ class ApiController extends AbstractController
         if ($order && $params['trxstatus'] === '0000') {
             $order->setStatus(1);
             $order->setPaymentSn($params['trxid']);
-            $order->setPaidAt(new \DateTime());
+            $order->setPaidAt(new \DateTimeImmutable());
             $this->doctrine->getManager()->flush();
         }
 
