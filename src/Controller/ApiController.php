@@ -54,8 +54,8 @@ class ApiController extends AbstractController
     #[Route('/order/notify', methods: ['POST'])]
     public function order_notify(Request $request, LoggerInterface $logger): Response 
     {
-        $content = $request->getContent();
-        $params = json_decode($content, true);
+        $params = $request->request->all();
+        dump($params);
         
         // Log the notification
         $logger->info('Payment notification received', [
@@ -76,11 +76,13 @@ class ApiController extends AbstractController
             'sn' => $params['reqsn']
         ]);
         
-        if ($order) {
+        if ($order && $params['trxstatus'] === '0000') {
             $order->setStatus(1);
+            $order->setPaymentSn($params['trxid']);
+            $order->setPaidAt(new \DateTime());
             $this->doctrine->getManager()->flush();
         }
 
-        return $this->json(['code' => 'OK']);
+        return $this->json(['code' => 'success']);
     }
 }
