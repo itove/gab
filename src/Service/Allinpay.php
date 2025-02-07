@@ -34,7 +34,7 @@ class Allinpay
         $this->requestStack = $requestStack;
     }
     
-    public function createOrder(string $sn)
+    public function createOrder(string $sn, int $amount)
     {
         $request = $this->requestStack->getCurrentRequest();
         $domain = $request->getSchemeAndHttpHost();
@@ -45,7 +45,7 @@ class Allinpay
             'cusid' => $_ENV['ALLINPAY_CUSID'],
             'appid' => $_ENV['ALLINPAY_APPID'],
             'version' => '12',
-            'trxamt' => '10',
+            'trxamt' => $amount,
             'reqsn' => $sn,
             'randomstr' => bin2hex(random_bytes(16)),
             'signtype' => 'RSA',

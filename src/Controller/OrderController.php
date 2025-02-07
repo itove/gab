@@ -69,7 +69,10 @@ class OrderController extends AbstractController
     public function pending(Request $request, Allinpay $allinpay): Response
     {
         $sn = $request->query->get('sn');
-        $data = $allinpay->createOrder($sn);
+
+        $order = $this->doctrine->getRepository(Order::class)->findOneBy(['sn' => $sn]);
+
+        $data = $allinpay->createOrder($sn, $amount);
 
         // dump($data);
         return $this->render('order/pending.html.twig', ['data' => $data]);
@@ -111,6 +114,7 @@ class OrderController extends AbstractController
             $order->setInsured($insured);
             $order->setApplicant($user);
             $order->setProduct($product);
+            $order->setAmount($product->getPrice());
             $entityManager->persist($order);
             $sn = $order->getSn();
 
