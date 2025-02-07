@@ -54,11 +54,13 @@ class ApiController extends AbstractController
     #[Route('/order/notify', methods: ['POST'])]
     public function order_notify(Request $request, LoggerInterface $logger): Response 
     {
-        $params = $request->toArray();
+        $content = $request->getContent();
+        $params = json_decode($content, true);
         
         // Log the notification
         $logger->info('Payment notification received', [
-            'params' => $params
+            'params' => $params,
+            'raw' => $content
         ]);
 
         // Validate signature
