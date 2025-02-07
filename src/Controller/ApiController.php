@@ -77,7 +77,7 @@ class ApiController extends AbstractController
 
         // Update order status
         $order = $this->doctrine->getRepository(Order::class)->findOneBy([
-            'sn' => $params['reqsn']
+            'sn' => $params['cusorderid']
         ]);
         
         if ($order && $params['trxstatus'] === '0000') {
