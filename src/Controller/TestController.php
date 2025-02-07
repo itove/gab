@@ -22,17 +22,10 @@ final class TestController extends AbstractController
     #[Route('/pay', name: 'app_test_pay')]
     public function index(Allinpay $allinpay): Response
     {
-        $resp = $allinpay->createOrder();
-        // dump($resp);
+        $data = $allinpay->createOrder();
+        // dump($data);
         
-        $url = $resp->getInfo('url');
-        dump($url);
-
-        // return $this->redirect($url);
-
-        return $this->render('test/index.html.twig', [
-            'url' => $url,
-        ]);
+        return $this->render('test/index.html.twig', ['data' => $data]);
     }
 
     #[Route('/sms', name: 'app_test_sms')]

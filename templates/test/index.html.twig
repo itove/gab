@@ -1,5 +1,10 @@
 <body>
 <div class="example-wrapper">
-    <a class="link" href="{{ url }}" target="_blank">跳转至收银宝H5收银台</a>
+  <form action="https://syb.allinpay.com/apiweb/h5unionpay/unionorder" method="POST">
+    {% for k, v in data %}
+    <input name="{{k}}" value="{{v}}" />
+    {% endfor %}
+    <input type="submit" \>
+  </form>
 </div>
 </body>

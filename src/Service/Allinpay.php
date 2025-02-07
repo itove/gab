@@ -56,17 +56,11 @@ class Allinpay
             'notify_url' => 'https://jz.hbdtjj.com/api/order/notify',
         ];
         $data['sign'] = self::sign($data);
-        // $headers[] = 'Accept: application/json';
+        // $resp = $this->httpClient->request('POST', $url, ['body' => $data]);
+        // $resp->getContent();
+        // // dump($resp->getInfo());
 
-        // $content = $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $data])->toArray();
-        // $content = $this->httpClient->request('POST', $url, ['body' => $data])->toArray();
-        $resp = $this->httpClient->request('POST', $url, ['body' => $data]);
-        $resp->getContent();
-        // dump($resp);
-        dump($resp->getInfo());
-        // dump($resp->getInfo('url'));
-
-        return $resp;
+        return $data;
     }
     
     public function sign(array $array)
