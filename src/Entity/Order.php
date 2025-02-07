@@ -36,6 +36,12 @@ class Order
     #[ORM\Column(nullable: true)]
     private ?int $amount = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $PaidAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $PaymentSn = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -128,6 +134,30 @@ class Order
     public function setAmount(?int $amount): static
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getPaidAt(): ?\DateTimeImmutable
+    {
+        return $this->PaidAt;
+    }
+
+    public function setPaidAt(?\DateTimeImmutable $PaidAt): static
+    {
+        $this->PaidAt = $PaidAt;
+
+        return $this;
+    }
+
+    public function getPaymentSn(): ?string
+    {
+        return $this->PaymentSn;
+    }
+
+    public function setPaymentSn(?string $PaymentSn): static
+    {
+        $this->PaymentSn = $PaymentSn;
 
         return $this;
     }
