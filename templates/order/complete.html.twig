@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}支付完成{% endblock %}
+
+{% block body %}
+<div class="page">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="title text-align-center">支付完成</div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="block text-align-center">
+            <i class="icon f7-icons color-green" style="font-size: 48px;">checkmark_circle</i>
+            <h2>支付成功</h2>
+            <p>您的订单支付已完成</p>
+        </div>
+        <div class="block">
+            <a href="{{ path('app_orders') }}" class="button button-large button-fill">查看订单</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

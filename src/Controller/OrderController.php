@@ -131,4 +131,10 @@ class OrderController extends AbstractController
             ], 400);
         }
     }
-} 
+
+    #[Route('/order/complete', name: 'app_order_complete')]
+    public function complete(Request $request): Response
+    {
+        return $this->render('order/complete.html.twig');
+    }
+}
