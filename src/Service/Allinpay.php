@@ -35,14 +35,17 @@ class Allinpay
     {
         // $url = "https://vsp.allinpay.com/apiweb/h5unionpay/unionorder";
         // $url = 'https://syb-test.allinpay.com/apiweb/h5unionpay/unionorder';
+        // H5收银台订单提交接口
         $url = 'https://syb.allinpay.com/apiweb/h5unionpay/unionorder';
+        // 统一支付API
+        // $url = 'https://vsp.allinpay.com/apiweb/unitorder/pay';
 
         $sn = strtoupper(str_replace('.', '', uniqid('', true)));
         $rand  = bin2hex(random_bytes(16));
         
         $data = [
-            'cusid' => '660290063002ED6',
-            'appid' => '00315248',
+            'cusid' => $_ENV['ALLINPAY_CUSID'],
+            'appid' => $_ENV['ALLINPAY_APPID'],
             'version' => '12',
             'trxamt' => '10',
             'reqsn' => $sn,
