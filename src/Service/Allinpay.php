@@ -68,26 +68,39 @@ class Allinpay
     
     public function sign(array $array)
     {
-        // dump($array);
         ksort($array);
-        // dump($array);
         $bufSignSrc = self::ToUrlParams($array);
-        dump($bufSignSrc);
-		$private_key='MIIEpAIBAAKCAQEAtLmCSjRIu/QmJacbDrdng0SVXu4Jmm2HbdIQzYw7aOexdyk1RmgB/fBNbwmmhMO5CfFjjwxGCrBOB3sz14o4R6Hn2q4i2bJdLU7Tqw8pnYJ5HCSFP14z4Zyu/PwoB/bQvUW9EVLZlvgbYyBBnHDypN/NAWcD986FTZ6aUzljEzmv4+j0qjnZE2ChgHENSUOPie6RG+rtqUcVNqnc66I23vJZlKlv5Y1Ptc5eYayWUVqiVXagBMCxCL4OCiAzSrkxYAAQSbJcEL7reIxA/eDQU9zY2zpVc9I6zoa7dD42Bzb5HeJLlBQmgb6rVKQFonRcR7FvZ8B/mp3mWl28Kra8awIDAQABAoIBAE8aB1INUmyZ73x5iNlHI1KMWUjErYVfPXCvClW9dF91UfLTIZNggMayQGJCehUQSdR1SFtbRuj0xCJ4JXfI8ts/nWjU4UIh1LC5GOJ9b3yWmAXeYkgbJmAwoVLv12GtAS5m8Ns9RSnUDMC1ZKJhuYK6xlM/0LfNOAGCUw/sRVYrJGlrZzbwakZoZN3q/lGcPWS3ys/0O3NwjTuzpmgHR5oFnePJbpWiQXuFG9giU6sm5hDjDEv5WOv2oZsOK5l3SOmE72i9C8uf5uaat47dZTU94xMWXB1idnlGmh6WBy1hGlspbmJ54aPkiZbquPjnP0R8W+ugBck486rhTMS+jNkCgYEA2SEgbDV/iTiN64UMG7kO+IZftvcfOQ94ebEoMp+rWm3IXmBzJ/z0aLwEthVX4wW0sIXAyZIhKlewVhRLIqtm0EToyz2ksgvUH1w0xrs+hzwjQ/Ef+WzYjswIaijARc+F0uhU5qypKUannjiYtDwJueod5i9ZJ1G549vS9vq3wG8CgYEA1RP69bmMUCINfD8Y1Uj3ArlwLH4aYWZ//ECOgbOyZTwGgc8YI7OBtx2R3fD6V2CmyBLCXbdxfo8AaDRgmluYOCKUdq3lRFhUF9SuYhZlPbnfr8TCRcoj+/5g6GBiCJGmET4830lsuDFVfecOeCUPbti883wbC6E6WwJd1FmQScUCgYEAuqLD6N+Pcdcf/ntNriLDIJL4gSAoQXbv2sKRx/oBY2iMW7tSIORI/iHndtAfzG+iIj3GOj2WrnvTghpNf06PwKQK6nBhOf365r3uS4i1ta7WrVb9YfvSpePxs7a1lwxLfr/gAqwVd/pYqCMD96DHx3vbGXpHiwmv3JGe5FccTZcCgYEAwIHeuGa82CEL4fb3rqrPUAzNxcTgfKMoenSwy4nYYRIMJvc9rfOd/ByhDs2Kv6q4xAX+yMDVryvviDXaGVsreXv0egy+GDNdNnKWYlQtf8kQyTKQ+pCYVjEKyKdbqrY8PVPnlyw1J2ya+rboIbAJ83GptKmpnaY6nMLUluecLqkCgYBtGmdz83eBEykqWf/sqe9kjSr6EUwCXhjdHF5DHsiIXMpCWdBKPsIkPSBYOLBp+pIcs8gHfNY04tLSHMXnAOIEhsINf8AkU2e+6ryazHOl00dRgdyPc5IHvL2bMiE3EAWnuScJAUEA0DWYq2C6HuOU2374JhyGyulSWN10WsVQ4Q==';
-        // dump($private_key);
-        $private_key = chunk_split($private_key , 64, "\n");
-        // dump($private_key);
-        $key = "-----BEGIN RSA PRIVATE KEY-----\n".wordwrap($private_key)."-----END RSA PRIVATE KEY-----";
+        
+        // Debug data being signed
+        // dump("Raw data to sign: " . $bufSignSrc);
+        
+        // $private_key = '';
+
+        // Format private key properly
+        // $key = "-----BEGIN RSA PRIVATE KEY-----\n" . 
+        //        chunk_split($private_key, 64, "\n") .
+        //        "-----END RSA PRIVATE KEY-----";
+      
+        $key = self::getPrivateKey();
+
         // dump($key);
-        if(openssl_sign($bufSignSrc, $signature, $key, 'sha256WithRSAEncryption' )){
-            dump('success');
-        }else{
-            dump('fail');
-        } 
-        dump($signature);
-        $sign = base64_encode($signature);//加密后的内容通常含有特殊字符，需要编码转换下，在网络间通过url传输时要注意base64编码是否是url安全的
-        dump($sign);
-        return $sign;
+        // Check if key is valid
+        $res = openssl_pkey_get_private($key);
+        if (!$res) {
+            throw new \RuntimeException('Invalid private key: ' . openssl_error_string());
+        }
+
+        // Sign with explicit success check
+        $result = openssl_sign($bufSignSrc, $signature, $res, OPENSSL_ALGO_SHA1);
+        if ($result === false || empty($signature)) {
+            throw new \RuntimeException('Signing failed: ' . openssl_error_string());
+        }
+        
+        // dump("Signature length: " . strlen($signature));
+        // dump("Raw signature: " . bin2hex($signature));
+        
+        openssl_free_key($res);
+        return base64_encode($signature);
     }
 
 	public static function ToUrlParams(array $array)
@@ -114,6 +127,10 @@ class Allinpay
         $key = "-----BEGIN PUBLIC KEY-----\n$public_key-----END PUBLIC KEY-----\n";
         $result= openssl_verify($bufSignSrc,base64_decode($sign), $key );
         return $result;  
+    }
+
+    public static function getPrivateKey() {
+        return openssl_get_privatekey(file_get_contents($_ENV['ALLINPAY_PRIVATE_KEY_PATH']));
     }
 
     public function __destruct()
