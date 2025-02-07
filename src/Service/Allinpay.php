@@ -51,9 +51,8 @@ class Allinpay
             // 'paytype' => 'W03',
             'randomstr' => $rand,
             'signtype' => 'RSA',
-            'returl' => 'https://jz.hbdtjj.com/order/complete',
-            // 'notify_url' => 'https://jz.hbdtjj.com/api/order/notify',
-            'notify_url' => 'https://gab.dev.itove.com/api/order/notify',
+            'returl' => $_ENV['SERVER_DOMAIN'] . '/order/complete',
+            'notify_url' => $_ENV['SERVER_DOMAIN'] . '/api/order/notify',
         ];
         $data['sign'] = self::sign($data);
         // $resp = $this->httpClient->request('POST', $url, ['body' => $data]);
