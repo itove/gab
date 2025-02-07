@@ -33,6 +33,14 @@
                             </div>
                         </div>
                     </li>
+                    <li class="item-content item-input">
+                        <div class="item-inner">
+                            <div class="item-title item-label">价格</div>
+                            <div class="item-input-wrap">
+                                <input type="text" value="¥ {{ (data.trxamt / 100.00) | number_format(2) }}" readonly>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

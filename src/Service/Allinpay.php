@@ -39,8 +39,6 @@ class Allinpay
         $request = $this->requestStack->getCurrentRequest();
         $domain = $request->getSchemeAndHttpHost();
         
-        $url = 'https://syb.allinpay.com/apiweb/h5unionpay/unionorder';
-
         $data = [
             'cusid' => $_ENV['ALLINPAY_CUSID'],
             'appid' => $_ENV['ALLINPAY_APPID'],
@@ -52,7 +50,9 @@ class Allinpay
             'returl' => $domain . '/order/complete',
             'notify_url' => $domain . '/api/order/notify',
         ];
+
         $data['sign'] = self::sign($data);
+
         return $data;
     }
     
