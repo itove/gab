@@ -60,7 +60,6 @@ class ApiController extends AbstractController
         // Log the notification
         $logger->info('Payment notification received', [
             'params' => $params,
-            'raw' => $content
         ]);
 
         // Validate signature
