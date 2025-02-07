@@ -62,7 +62,7 @@ class OrderCrudController extends AbstractCrudController
             ->add('applicant')
             // ->add('applicant.idnum')
             //->add('applicant.phone')
-            //->add('insured')
+            ->add('insured')
             //->add('insured.idnum')
             //->add('insured.school')
             ->add(ChoiceFilter::new('status')->setChoices(self::ORDER_STATUSES))
