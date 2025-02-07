@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Sms;
 use App\Service\Allinpay;
+use Psr\Log\LoggerInterface;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -51,13 +52,33 @@ class ApiController extends AbstractController
     }
 
     #[Route('/order/notify', methods: ['POST'])]
-    public function order_notify(Request $request): Response
+    public function order_notify(Request $request, LoggerInterface $logger): Response 
     {
         $params = $request->toArray();
-        dump($params);
         
-        $resp = ['code' => 0];
+        // Log the notification
+        $logger->info('Payment notification received', [
+            'params' => $params
+        ]);
 
-        return $this->json($resp);
+        // Validate signature
+        if (!Allinpay::ValidSign($params)) {
+            return $this->json([
+                'code' => 'ERROR',
+                'msg' => 'Invalid signature'
+            ]);
+        }
+
+        // Update order status
+        $order = $this->doctrine->getRepository(Order::class)->findOneBy([
+            'sn' => $params['reqsn']
+        ]);
+        
+        if ($order) {
+            $order->setStatus(1);
+            $this->doctrine->getManager()->flush();
+        }
+
+        return $this->json(['code' => 'OK']);
     }
 }
