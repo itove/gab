@@ -72,7 +72,7 @@ class OrderController extends AbstractController
 
         $order = $this->doctrine->getRepository(Order::class)->findOneBy(['sn' => $sn]);
 
-        $data = $allinpay->createOrder($sn, $amount);
+        $data = $allinpay->createOrder($sn, $order->getAmount());
 
         // dump($data);
         return $this->render('order/pending.html.twig', ['data' => $data]);
