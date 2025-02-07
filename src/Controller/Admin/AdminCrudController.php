@@ -13,8 +13,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
-class UserCrudController extends AbstractCrudController
+class AdminCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
@@ -25,7 +26,7 @@ class UserCrudController extends AbstractCrudController
     {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $qb->andWhere('entity.isAdmin = :isAdmin')
-           ->setParameter('isAdmin', false);
+           ->setParameter('isAdmin', true);
         
         return $qb;
     }
@@ -35,16 +36,34 @@ class UserCrudController extends AbstractCrudController
         yield IdField::new('id')->onlyOnIndex();
         yield TextField::new('username');
         yield TextField::new('name');
-        yield TextField::new('phone');
-        yield TextField::new('idnum');
+        // yield TextField::new('phone');
+        // yield TextField::new('idnum');
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->disable('new')
-            ->disable('edit')
-            ->disable('delete')
+            // ->disable('new')
+            // ->disable('edit')
+            // ->disable('delete')
         ;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        $crud
+            ->setPageTitle('index', '管理员')
+            ->setPageTitle('new', '新增管理员')
+            ->setPageTitle('edit', ' 编辑管理员')
+        ;
+        return $crud;
+    }
+
+    public function createEntity(string $entityFqcn)
+    {
+        $user = new User();
+        $user->setRoles(['ROLE_ADMIN']);
+
+        return $user;
     }
 }
