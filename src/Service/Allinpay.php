@@ -11,6 +11,7 @@ namespace App\Service;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class Allinpay
 {
@@ -19,8 +20,9 @@ class Allinpay
     private $httpClient;
     private $logger;
     private $em;
+    private $requestStack;
     
-    public function __construct(HttpClientInterface $httpClient, LoggerInterface $logger, EntityManagerInterface $em)
+    public function __construct(HttpClientInterface $httpClient, LoggerInterface $logger, EntityManagerInterface $em, RequestStack $requestStack)
     {
         $accessKeyId = $_ENV['SMS_ACCESS_KEY_ID'];
         $accessKeySecret = $_ENV['SMS_ACCESS_KEY_SECRET'];
@@ -29,36 +31,28 @@ class Allinpay
         $this->logger = $logger;
         $this->signName = $_ENV['SMS_SIGNATURE'];
         $this->em = $em;
+        $this->requestStack = $requestStack;
     }
     
     public function createOrder(string $sn)
     {
-        // $url = "https://vsp.allinpay.com/apiweb/h5unionpay/unionorder";
-        // $url = 'https://syb-test.allinpay.com/apiweb/h5unionpay/unionorder';
-        // H5收银台订单提交接口
-        $url = 'https://syb.allinpay.com/apiweb/h5unionpay/unionorder';
-        // 统一支付API
-        // $url = 'https://vsp.allinpay.com/apiweb/unitorder/pay';
-
-        $rand  = bin2hex(random_bytes(16));
+        $request = $this->requestStack->getCurrentRequest();
+        $domain = $request->getSchemeAndHttpHost();
         
+        $url = 'https://syb.allinpay.com/apiweb/h5unionpay/unionorder';
+
         $data = [
             'cusid' => $_ENV['ALLINPAY_CUSID'],
             'appid' => $_ENV['ALLINPAY_APPID'],
             'version' => '12',
             'trxamt' => '10',
             'reqsn' => $sn,
-            // 'paytype' => 'W03',
-            'randomstr' => $rand,
+            'randomstr' => bin2hex(random_bytes(16)),
             'signtype' => 'RSA',
-            'returl' => $_ENV['SERVER_DOMAIN'] . '/order/complete',
-            'notify_url' => $_ENV['SERVER_DOMAIN'] . '/api/order/notify',
+            'returl' => $domain . '/order/complete',
+            'notify_url' => $domain . '/api/order/notify',
         ];
         $data['sign'] = self::sign($data);
-        // $resp = $this->httpClient->request('POST', $url, ['body' => $data]);
-        // $resp->getContent();
-        // // dump($resp->getInfo());
-
         return $data;
     }
     
