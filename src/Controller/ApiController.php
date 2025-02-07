@@ -10,6 +10,7 @@ use App\Service\Sms;
 use App\Service\Allinpay;
 use Psr\Log\LoggerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Order;
 
 #[Route('/api')]
 class ApiController extends AbstractController
