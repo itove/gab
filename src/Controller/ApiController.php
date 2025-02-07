@@ -9,12 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Service\Sms;
 use App\Service\Allinpay;
 use Psr\Log\LoggerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 #[Route('/api')]
 class ApiController extends AbstractController
 {
-    public function __construct()
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
     {
+        $this->doctrine = $doctrine;
     }
 
     #[Route('/media_objects', methods: ['POST'])]
