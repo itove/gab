@@ -86,9 +86,25 @@ class OrderCrudController extends AbstractCrudController
                    '产品', '金额', '状态', '创建时间', '支付时间'];
         $sheet->fromArray([$headers], null, 'A1');
 
+        // Set text format for ID and phone columns
+        $sheet->getStyle('D:E')->getNumberFormat()->setFormatCode('@');  // 投保人身份证和电话
+        $sheet->getStyle('G')->getNumberFormat()->setFormatCode('@');    // 被保人身份证
+        
+        // Set currency format for amount column
+        $sheet->getStyle('L')->getNumberFormat()->setFormatCode('¥#,##0.00');
+
         // Add data rows
         $row = 2;
         foreach ($orders as $order) {
+            $createdAt = clone $order->getCreatedAt();
+            $createdAt->setTimezone(new \DateTimeZone('Asia/Shanghai'));
+            
+            $paidAt = null;
+            if ($order->getPaidAt()) {
+                $paidAt = clone $order->getPaidAt();
+                $paidAt->setTimezone(new \DateTimeZone('Asia/Shanghai'));
+            }
+            
             $sheet->fromArray([[
                 $order->getSn(),
                 $order->getPaymentSn(),
@@ -101,10 +117,10 @@ class OrderCrudController extends AbstractCrudController
                 $order->getInsured()->getGrade(),
                 $order->getInsured()->getClass(),
                 $order->getProduct()->getName(),
-                $order->getAmount(),
+                $order->getAmount() / 100,
                 array_flip(self::ORDER_STATUSES)[$order->getStatus()],
-                $order->getCreatedAt()->format('Y-m-d H:i:s'),
-                $order->getPaidAt() ? $order->getPaidAt()->format('Y-m-d H:i:s') : ''
+                $createdAt->format('Y-m-d H:i:s'),
+                $paidAt ? $paidAt->format('Y-m-d H:i:s') : ''
             ]], null, 'A' . $row);
             $row++;
         }
