@@ -21,6 +21,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class OrderCrudController extends AbstractCrudController
 {
@@ -113,6 +114,11 @@ class OrderCrudController extends AbstractCrudController
                 $order->getCreatedAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s'),
                 $order->getPaidAt() ? $order->getPaidAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s') : ''
             ]], null, 'A' . $row);
+
+            $sheet->setCellValueExplicit('D' . $row, $order->getApplicant()->getIdnum(), DataType::TYPE_STRING);
+            // $sheet->setCellValueExplicit('E' . $row, $order->getApplicant()->getPhone(), DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit('G' . $row, $order->getInsured()->getIdnum(), DataType::TYPE_STRING);
+
             $row++;
         }
 
