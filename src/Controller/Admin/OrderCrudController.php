@@ -116,6 +116,7 @@ class OrderCrudController extends AbstractCrudController
             $row++;
         }
 
+        date_default_timezone_set('Asia/Shanghai');
         // Create the XLSX file
         $writer = new Xlsx($spreadsheet);
         $fileName = 'orders_' . date('Y-m-d_His') . '.xlsx';
