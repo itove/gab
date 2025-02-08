@@ -60,7 +60,6 @@ class ApiController extends AbstractController
     public function order_notify(Request $request, LoggerInterface $logger): Response 
     {
         $params = $request->request->all();
-        dump($params);
         
         // Log the notification
         $logger->info('Payment notification received', [
@@ -69,10 +68,7 @@ class ApiController extends AbstractController
 
         // Validate signature
         if (!Allinpay::ValidSign($params)) {
-            return $this->json([
-                'code' => 'ERROR',
-                'msg' => 'Invalid signature'
-            ]);
+            return new Response('fail', Response::HTTP_OK);
         }
 
         // Update order status
@@ -87,6 +83,6 @@ class ApiController extends AbstractController
             $this->doctrine->getManager()->flush();
         }
 
-        return $this->json(['code' => 'success']);
+        return new Response('success', Response::HTTP_OK);
     }
 }
