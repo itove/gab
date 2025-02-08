@@ -6,7 +6,9 @@
 <div class="page">
     <div class="navbar">
         <div class="navbar-inner">
+            <div class="left"></div>
             <div class="title text-align-center">支付完成</div>
+            <div class="right"></div>
         </div>
     </div>
     <div class="page-content">
@@ -15,7 +17,7 @@
             <h2>支付成功</h2>
             <p>您的订单支付已完成</p>
         </div>
-        <div class="block">
+        <div class="block display-none">
             <button onclick="window.location.href='{{ path('app_orders') }}'" class="button button-large button-fill">查看订单</button>
         </div>
     </div>
