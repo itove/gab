@@ -96,15 +96,6 @@ class OrderCrudController extends AbstractCrudController
         // Add data rows
         $row = 2;
         foreach ($orders as $order) {
-            $createdAt = clone $order->getCreatedAt();
-            $createdAt->setTimezone(new \DateTimeZone('Asia/Shanghai'));
-            
-            $paidAt = null;
-            if ($order->getPaidAt()) {
-                $paidAt = clone $order->getPaidAt();
-                $paidAt->setTimezone(new \DateTimeZone('Asia/Shanghai'));
-            }
-            
             $sheet->fromArray([[
                 $order->getSn(),
                 $order->getPaymentSn(),
@@ -119,8 +110,8 @@ class OrderCrudController extends AbstractCrudController
                 $order->getProduct()->getName(),
                 $order->getAmount() / 100,
                 array_flip(self::ORDER_STATUSES)[$order->getStatus()],
-                $createdAt->format('Y-m-d H:i:s'),
-                $paidAt ? $paidAt->format('Y-m-d H:i:s') : ''
+                $order->getCreatedAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s'),
+                $order->getPaidAt() ? $order->getPaidAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s') : ''
             ]], null, 'A' . $row);
             $row++;
         }
