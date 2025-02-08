@@ -115,6 +115,7 @@ class OrderCrudController extends AbstractCrudController
                 $order->getPaidAt() ? $order->getPaidAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s') : ''
             ]], null, 'A' . $row);
 
+            $sheet->setCellValueExplicit('B' . $row, $order->getPaymentSn(), DataType::TYPE_STRING);
             $sheet->setCellValueExplicit('D' . $row, $order->getApplicant()->getIdnum(), DataType::TYPE_STRING);
             // $sheet->setCellValueExplicit('E' . $row, $order->getApplicant()->getPhone(), DataType::TYPE_STRING);
             $sheet->setCellValueExplicit('G' . $row, $order->getInsured()->getIdnum(), DataType::TYPE_STRING);
