@@ -15,9 +15,22 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Doctrine\Persistence\ManagerRegistry;
 
 class OrderCrudController extends AbstractCrudController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
     const ORDER_STATUSES = ['待付款' => 0, '已支付' => 1];
 
     public static function getEntityFqcn(): string
@@ -47,11 +60,73 @@ class OrderCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $exportXlsx = Action::new('exportXlsx', '导出Excel')
+            ->linkToCrudAction('exportXlsx')
+            ->createAsGlobalAction();
+
         return $actions
+            ->add(Crud::PAGE_INDEX, $exportXlsx)
             ->disable('new')
             ->disable('edit')
             ->disable('delete')
         ;
+    }
+
+    public function exportXlsx()
+    {
+        $orderRepository = $this->doctrine->getRepository(Order::class);
+        $orders = $orderRepository->findAll();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set headers
+        $headers = ['订单号', '通联支付号', '投保人', '投保人身份证', '投保人电话', 
+                   '被保人', '被保人身份证', '学校', '年级', '班级', 
+                   '产品', '金额', '状态', '创建时间', '支付时间'];
+        $sheet->fromArray([$headers], null, 'A1');
+
+        // Add data rows
+        $row = 2;
+        foreach ($orders as $order) {
+            $sheet->fromArray([[
+                $order->getSn(),
+                $order->getPaymentSn(),
+                $order->getApplicant()->getName(),
+                $order->getApplicant()->getIdnum(),
+                $order->getApplicant()->getPhone(),
+                $order->getInsured()->getName(),
+                $order->getInsured()->getIdnum(),
+                $order->getInsured()->getSchool(),
+                $order->getInsured()->getGrade(),
+                $order->getInsured()->getClass(),
+                $order->getProduct()->getName(),
+                $order->getAmount(),
+                array_flip(self::ORDER_STATUSES)[$order->getStatus()],
+                $order->getCreatedAt()->format('Y-m-d H:i:s'),
+                $order->getPaidAt() ? $order->getPaidAt()->format('Y-m-d H:i:s') : ''
+            ]], null, 'A' . $row);
+            $row++;
+        }
+
+        // Create the XLSX file
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'orders_' . date('Y-m-d_His') . '.xlsx';
+        
+        $response = new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            }
+        );
+        
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $fileName
+        );
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        
+        return $response;
     }
 
     public function configureFilters(Filters $filters): Filters
