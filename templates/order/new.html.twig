@@ -253,7 +253,7 @@
                 values: gradeValues.map(item => item.value),
                 onChange: function(picker, value) {
                     const selectedGrade = gradeValues.find(item => item.value === value);
-                    document.querySelector('input[name="grade"]').value = selectedGrade.id;
+                    document.querySelector('input[name="grade"]').value = value;
                     document.querySelector('#grade-picker').textContent = value;
                 }
             }]
