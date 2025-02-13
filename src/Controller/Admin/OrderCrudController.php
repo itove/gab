@@ -32,7 +32,7 @@ class OrderCrudController extends AbstractCrudController
         $this->doctrine = $doctrine;
     }
 
-    const ORDER_STATUSES = ['待付款' => 0, '已支付' => 1];
+    const ORDER_STATUSES = ['待付款' => 0, '已支付' => 1, '已退款' => 2];
 
     public static function getEntityFqcn(): string
     {
