@@ -141,4 +141,16 @@ class OrderController extends AbstractController
     {
         return $this->render('order/complete.html.twig');
     }
+
+    #[Route('/order/refund', name: 'app_order_refund')]
+    public function refund(Allinpay $allinpay): Response
+    {
+        $refund_sn = '67AC0EF16085A681873961';
+        $oldtrxid = '';
+
+        $data = $allinpay->refund($refund_sn, $oldtrxid, 100);
+
+        dump($data);
+        return new Response('<body></body>');
+    }
 }

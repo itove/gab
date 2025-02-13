@@ -56,6 +56,26 @@ class Allinpay
         return $data;
     }
     
+    public function refund(string $refund_sn, string $oldtrxid,  int $amount)
+    {
+        $url = 'https://vsp.allinpay.com/apiweb/tranx/refund';
+
+        $data = [
+            'cusid' => $_ENV['ALLINPAY_CUSID'],
+            'appid' => $_ENV['ALLINPAY_APPID'],
+            'version' => '12',
+            'trxamt' => $amount,
+            'reqsn' => $refund_sn,
+            'oldtrxid' => $oldtrxid,
+            'randomstr' => bin2hex(random_bytes(16)),
+            'signtype' => 'RSA',
+        ];
+
+        $data['sign'] = self::sign($data);
+
+        return $this->httpClient->request('POST', $url, ['body' => $data])->toArray();
+    }
+    
     public function sign(array $array)
     {
         ksort($array);
