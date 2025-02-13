@@ -25,14 +25,14 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class OrderCrudController extends AbstractCrudController
 {
+    const ORDER_STATUSES = ['待付款' => 0, '已支付' => 1, '已退款' => 2];
+
     private $doctrine;
 
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;
     }
-
-    const ORDER_STATUSES = ['待付款' => 0, '已支付' => 1, '已退款' => 2];
 
     public static function getEntityFqcn(): string
     {
