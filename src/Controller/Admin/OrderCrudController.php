@@ -91,12 +91,12 @@ class OrderCrudController extends AbstractCrudController
 
     public function exportXlsx()
     {
-        ini_set('memory_limit', '256M');
-        ini_set('max_execution_time', 300);
-
-        $orderRepository = $this->doctrine->getRepository(Order::class);
-        $orders = $orderRepository->findBy(['status' => 1]);
-
+        ini_set('memory_limit', '512M');  // Double memory limit
+        ini_set('max_execution_time', 600); // 10 minutes
+        
+        $batchSize = 100;  // Increase batch size
+        $offset = 0;
+        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -106,40 +106,71 @@ class OrderCrudController extends AbstractCrudController
                    '产品', '金额', '状态', '创建时间', '支付时间'];
         $sheet->fromArray([$headers], null, 'A1');
 
-        // Set text format for ID and phone columns
-        $sheet->getStyle('D:E')->getNumberFormat()->setFormatCode('@');  // 投保人身份证和电话
-        $sheet->getStyle('G')->getNumberFormat()->setFormatCode('@');    // 被保人身份证
-        
-        // Set currency format for amount column
+        // Set formats
+        $sheet->getStyle('D:E')->getNumberFormat()->setFormatCode('@');
+        $sheet->getStyle('G')->getNumberFormat()->setFormatCode('@');
         $sheet->getStyle('L')->getNumberFormat()->setFormatCode('¥#,##0.00');
 
-        // Add data rows
+        // Process in batches
         $row = 2;
-        foreach ($orders as $order) {
-            $sheet->fromArray([[
-                $order->getSn(),
-                $order->getPaymentSn(),
-                $order->getApplicant()->getName(),
-                $order->getApplicant()->getIdnum(),
-                $order->getApplicant()->getPhone(),
-                $order->getInsured()->getName(),
-                $order->getInsured()->getIdnum(),
-                $order->getInsured()->getSchool(),
-                $order->getInsured()->getGrade(),
-                $order->getInsured()->getClass(),
-                $order->getProduct()->getName(),
-                $order->getAmount() / 100,
-                array_flip(self::ORDER_STATUSES)[$order->getStatus()],
-                $order->getCreatedAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s'),
-                $order->getPaidAt() ? $order->getPaidAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s') : ''
-            ]], null, 'A' . $row);
+        $em = $this->doctrine->getManager();
+        $repository = $em->getRepository(Order::class);
+        
+        // Create query builder for optimization
+        $qb = $repository->createQueryBuilder('o')
+            ->select('o', 'a', 'i', 'p')
+            ->leftJoin('o.applicant', 'a')
+            ->leftJoin('o.insured', 'i')
+            ->leftJoin('o.product', 'p')
+            ->andWhere('o.status > :status')
+            ->setParameter('status', 0)
+            ->setMaxResults($batchSize)
+            ->setFirstResult($offset);
 
-            $sheet->setCellValueExplicit('B' . $row, $order->getPaymentSn(), DataType::TYPE_STRING);
-            $sheet->setCellValueExplicit('D' . $row, $order->getApplicant()->getIdnum(), DataType::TYPE_STRING);
-            // $sheet->setCellValueExplicit('E' . $row, $order->getApplicant()->getPhone(), DataType::TYPE_STRING);
-            $sheet->setCellValueExplicit('G' . $row, $order->getInsured()->getIdnum(), DataType::TYPE_STRING);
+        // Add progress tracking
+        $totalCount = $repository->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
-            $row++;
+        while ($orders = $qb->getQuery()->getResult()) {
+            foreach ($orders as $order) {
+                $sheet->fromArray([[
+                    $order->getSn(),
+                    $order->getPaymentSn(),
+                    $order->getApplicant()->getName(),
+                    $order->getApplicant()->getIdnum(),
+                    $order->getApplicant()->getPhone(),
+                    $order->getInsured()->getName(),
+                    $order->getInsured()->getIdnum(),
+                    $order->getInsured()->getSchool(),
+                    $order->getInsured()->getGrade(),
+                    $order->getInsured()->getClass(),
+                    $order->getProduct()->getName(),
+                    $order->getAmount() / 100,
+                    array_flip(self::ORDER_STATUSES)[$order->getStatus()],
+                    $order->getCreatedAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s'),
+                    $order->getPaidAt() ? $order->getPaidAt()->setTimezone(new \DateTimeZone('Asia/Shanghai'))->format('Y-m-d H:i:s') : ''
+                ]], null, 'A' . $row);
+
+                $sheet->setCellValueExplicit('B' . $row, $order->getPaymentSn(), DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit('D' . $row, $order->getApplicant()->getIdnum(), DataType::TYPE_STRING);
+                // $sheet->setCellValueExplicit('E' . $row, $order->getApplicant()->getPhone(), DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit('G' . $row, $order->getInsured()->getIdnum(), DataType::TYPE_STRING);
+
+                $row++;
+
+                // Add memory cleanup
+                if ($row % 1000 === 0) {
+                    $em->clear();
+                    gc_collect_cycles();
+                }
+            }
+            
+            $offset += $batchSize;
+            $qb->setFirstResult($offset);
+            $em->clear();
+            gc_collect_cycles();
         }
 
         date_default_timezone_set('Asia/Shanghai');
