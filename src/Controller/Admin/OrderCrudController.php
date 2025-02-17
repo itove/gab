@@ -92,7 +92,7 @@ class OrderCrudController extends AbstractCrudController
     public function exportXlsx()
     {
         $orderRepository = $this->doctrine->getRepository(Order::class);
-        $orders = $orderRepository->findBy(['status' => 1]);
+        $orders = $orderRepository->findAll();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
