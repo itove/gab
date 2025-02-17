@@ -22,16 +22,24 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use App\Service\Allinpay;
+use Symfony\Component\HttpFoundation\Response;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 
 class OrderCrudController extends AbstractCrudController
 {
     const ORDER_STATUSES = ['待付款' => 0, '已支付' => 1, '已退款' => 2];
 
     private $doctrine;
+    private AdminUrlGenerator $adminUrlGenerator;
+    private Allinpay $allinpay;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $doctrine, AdminUrlGenerator $adminUrlGenerator, Allinpay $allinpay)
     {
         $this->doctrine = $doctrine;
+        $this->adminUrlGenerator = $adminUrlGenerator;
+        $this->allinpay = $allinpay;
     }
 
     public static function getEntityFqcn(): string
@@ -65,8 +73,16 @@ class OrderCrudController extends AbstractCrudController
             ->linkToCrudAction('exportXlsx')
             ->createAsGlobalAction();
 
+        $refund = Action::new('refund', '退款')
+            ->linkToCrudAction('refund')
+            ->displayIf(static function ($entity) {
+                return $entity->getStatus() === 1;
+            });
+
         return $actions
             ->add(Crud::PAGE_INDEX, $exportXlsx)
+            ->add(Crud::PAGE_INDEX, $refund)
+            ->add(Crud::PAGE_DETAIL, $refund)
             ->disable('new')
             ->disable('edit')
             ->disable('delete')
@@ -142,6 +158,35 @@ class OrderCrudController extends AbstractCrudController
         $response->headers->set('Content-Disposition', $dispositionHeader);
         
         return $response;
+    }
+
+    public function refund(AdminContext $context): Response
+    {
+        $order = $context->getEntity()->getInstance();
+        
+        try {
+            $refundSn = 'R' . $order->getSn();
+            $result = $this->allinpay->refund(
+                $refundSn,
+                $order->getPaymentSn(),
+                $order->getAmount()
+            );
+
+            if (isset($result['retcode']) && $result['retcode'] === 'SUCCESS') {
+                $order->setStatus(2); // Set to refunded
+                $this->doctrine->getManager()->flush();
+                
+                $this->addFlash('success', '退款申请成功');
+            } else {
+                $this->addFlash('error', '退款失败: ' . ($result['retmsg'] ?? '未知错误'));
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', '退款出错: ' . $e->getMessage());
+        }
+
+        return $this->redirect($this->adminUrlGenerator
+            ->setAction(Action::INDEX)
+            ->generateUrl());
     }
 
     public function configureFilters(Filters $filters): Filters
