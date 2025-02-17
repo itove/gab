@@ -91,8 +91,11 @@ class OrderCrudController extends AbstractCrudController
 
     public function exportXlsx()
     {
+        ini_set('memory_limit', '256M');
+        ini_set('max_execution_time', 300);
+
         $orderRepository = $this->doctrine->getRepository(Order::class);
-        $orders = $orderRepository->findAll();
+        $orders = $orderRepository->findBy(['status' => 1]);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
