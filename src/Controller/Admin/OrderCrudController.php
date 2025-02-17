@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
+use App\Entity\Refund;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -200,16 +201,21 @@ class OrderCrudController extends AbstractCrudController
     {
         $order = $context->getEntity()->getInstance();
         
+        $refund = new Refund();
+        $refund->setOrd($order);
+        $this->doctrine->getManager()->persist($refund);
+        
         try {
-            $refundSn = 'R' . $order->getSn();
+            $refundSn = $refund->getSn();
             $result = $this->allinpay->refund(
                 $refundSn,
                 $order->getPaymentSn(),
                 $order->getAmount()
             );
 
-            if (isset($result['retcode']) && $result['retcode'] === 'SUCCESS') {
+            if (isset($result['trxstatus']) && $result['trxstatus'] === '0000') {
                 $order->setStatus(2); // Set to refunded
+                $refund->setStatus(1);
                 $this->doctrine->getManager()->flush();
                 
                 $this->addFlash('success', '退款申请成功');
