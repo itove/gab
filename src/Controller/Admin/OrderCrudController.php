@@ -118,18 +118,20 @@ class OrderCrudController extends AbstractCrudController
         
         // Create query builder for optimization
         $qb = $repository->createQueryBuilder('o')
-            ->select('o', 'a', 'i', 'p')
+            ->select('o, a, i, p')  // Remove DISTINCT
             ->leftJoin('o.applicant', 'a')
             ->leftJoin('o.insured', 'i')
             ->leftJoin('o.product', 'p')
             ->andWhere('o.status > :status')
             ->setParameter('status', 0)
+            ->groupBy('o.id, a.id, i.id, p.id')  // Add GROUP BY instead of DISTINCT
+            ->orderBy('o.id', 'ASC')
             ->setMaxResults($batchSize)
             ->setFirstResult($offset);
 
         // Add progress tracking
         $totalCount = $repository->createQueryBuilder('o')
-            ->select('COUNT(o.id)')
+            ->select('COUNT(DISTINCT o.id)')  // Use DISTINCT only for count
             ->getQuery()
             ->getSingleScalarResult();
 
