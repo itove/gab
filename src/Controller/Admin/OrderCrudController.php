@@ -201,6 +201,24 @@ class OrderCrudController extends AbstractCrudController
     {
         $order = $context->getEntity()->getInstance();
         
+        // Check order status
+        if ($order->getStatus() !== 1) {
+            $this->addFlash('error', '只有已支付的订单可以退款');
+            return $this->redirect($this->adminUrlGenerator
+                ->setAction(Action::INDEX)
+                ->generateUrl());
+        }
+
+        // Check existing refund
+        $existingRefund = $this->doctrine->getRepository(Refund::class)->findOneBy(['ord' => $order]);
+        if ($existingRefund) {
+            $this->addFlash('error', '该订单已有退款记录');
+            return $this->redirect($this->adminUrlGenerator
+                ->setAction(Action::INDEX)
+                ->generateUrl());
+        }
+
+        // Create new refund
         $refund = new Refund();
         $refund->setOrd($order);
         $this->doctrine->getManager()->persist($refund);
