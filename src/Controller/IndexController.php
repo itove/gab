@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class IndexController extends AbstractController
 {
-    #[Route('/', name: 'app_index')]
+    # #[Route('/', name: 'app_index')]
     public function index(): Response
     {
         $username = $this->getUser() ? $this->getUser()->getUserIdentifier() : '游客';
